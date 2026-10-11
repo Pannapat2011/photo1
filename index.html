@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Farco Image Drive</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='28' fill='%230A3A8C'/%3E%3Cpath d='M34 26 H92 L84 43 H55 V53 H78 L70 69 H55 V94 H34 Z' fill='%23fff'/%3E%3Ccircle cx='87' cy='61' r='8' fill='%23F28C28'/%3E%3C/svg%3E">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+        :root {
+            --bg: #EDF0F4; --dot: rgba(14,95,216,.10);
+            --card: #FFFFFF; --surface: #F5F7FA; --line: #DCE1E8;
+            --text: #0B1424; --muted: #5B6676;
+            --primary: #0E5FD8; --accent: #F28C28; --success: #0F9D58; --danger: #D93025;
+            --shadow: 0 1px 2px rgba(16,24,40,.05), 0 6px 18px rgba(16,24,40,.06);
+            --mono: 'IBM Plex Mono', ui-monospace, monospace;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0A111E; --dot: rgba(96,165,250,.07); --card: #121C2C; --surface: #172338; --line: #23324A;
+                --text: #E8EEF7; --muted: #8D9AB0; --primary: #3B82F6;
+            }
+        }
+        :root[data-theme="dark"] {
+            --bg: #0A111E; --dot: rgba(96,165,250,.07); --card: #121C2C; --surface: #172338; --line: #23324A;
+            --text: #E8EEF7; --muted: #8D9AB0; --primary: #3B82F6;
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            margin: 0; font-family: 'IBM Plex Sans Thai', sans-serif; color: var(--text);
+            background-color: var(--bg); background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px); background-size: 18px 18px;
+            min-height: 100vh; padding: 88px 16px 40px;
+        }
+        button, input { font-family: inherit; }
+
+        .topbar { position: fixed; inset: 0 0 auto 0; height: 68px; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 18px; background: var(--card); border-bottom: 1px solid var(--line); }
+        .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .brand svg { width: 44px; height: 44px; flex-shrink: 0; filter: drop-shadow(0 4px 10px rgba(14,95,216,.3)); }
+        .brand b { display: block; font-size: 17px; letter-spacing: .2px; white-space: nowrap; }
+        .brand small { display: block; font-size: 11px; color: var(--muted); letter-spacing: 1.6px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .top-actions { display: flex; gap: 8px; }
+        .icon-btn { height: 40px; min-width: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; font-weight: 600; font-size: 14px; }
+        .icon-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        .wrap { max-width: 980px; margin: 0 auto; }
+        .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 24px; margin-bottom: 18px; }
+        h2 { margin: 0 0 4px; font-size: 21px; display: flex; align-items: center; gap: 10px; }
+        h2::before { content: ''; width: 6px; height: 22px; border-radius: 3px; background: linear-gradient(var(--primary), var(--accent)); }
+        .muted { color: var(--muted); font-size: 14px; }
+
+        .tabs { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--line); padding: 4px; border-radius: 12px; margin-bottom: 18px; }
+        .tab { flex: 1; border: none; background: transparent; padding: 11px; border-radius: 9px; font-weight: 600; font-size: 15px; color: var(--muted); cursor: pointer; }
+        .tab.active { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(14,95,216,.25); }
+        .pane { display: none; } .pane.active { display: block; animation: up .25s ease; }
+        @keyframes up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+        /* Drop zone */
+        .drop { position: relative; border: 2px dashed color-mix(in srgb, var(--primary) 45%, var(--line)); border-radius: 18px; padding: 44px 20px; text-align: center; cursor: pointer;
+            background: linear-gradient(160deg, color-mix(in srgb, var(--primary) 6%, var(--card)), var(--card)); transition: .2s; overflow: hidden; }
+        .drop:hover, .drop.over { border-color: var(--primary); border-style: solid; background: color-mix(in srgb, var(--primary) 10%, var(--card)); }
+        .drop.over { transform: scale(1.01); }
+        .drop .big { width: 74px; height: 74px; margin: 0 auto 14px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 34px; color: #fff;
+            background: linear-gradient(135deg, #0A3A8C, #0E5FD8); box-shadow: 0 10px 24px rgba(14,95,216,.35); }
+        .drop h3 { margin: 0 0 6px; font-size: 20px; }
+        .drop .keys { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+        kbd { font-family: var(--mono); font-size: 12px; padding: 2px 7px; border-radius: 6px; border: 1px solid var(--line); border-bottom-width: 2px; background: var(--card); color: var(--text); }
+        .drop-btns { display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+        .btn { border: 1px solid transparent; padding: 12px 20px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: .15s; }
+        .btn:hover:not(:disabled) { filter: brightness(1.07); transform: translateY(-1px); }
+        .btn:disabled { opacity: .55; cursor: not-allowed; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-outline { background: var(--card); border-color: var(--line); color: var(--text); }
+        .btn-outline:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); filter: none; }
+        .btn-sm { padding: 7px 12px; font-size: 13px; }
+        .opts { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 14px; font-size: 14px; color: var(--muted); }
+        .opts label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+        .opts input { width: 17px; height: 17px; accent-color: var(--primary); margin: 0; }
+        .opts select { font-family: inherit; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); }
+
+        /* Upload list */
+        .list-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 22px 0 10px; flex-wrap: wrap; }
+        .list-head b { font-size: 15px; }
+        .items { display: grid; gap: 10px; }
+        .item { display: grid; grid-template-columns: 72px 1fr; gap: 14px; padding: 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); align-items: center; animation: up .25s ease; }
+        .item img { width: 72px; height: 72px; object-fit: cover; border-radius: 10px; background: var(--line); }
+        .item .nm { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item .meta { font-size: 12px; color: var(--muted); font-family: var(--mono); margin: 2px 0 8px; }
+        .bar { height: 6px; border-radius: 6px; background: var(--line); overflow: hidden; }
+        .bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width .2s; }
+        .linkrow { display: flex; gap: 6px; }
+        .linkrow input { flex: 1; min-width: 0; font-family: var(--mono); font-size: 12px; padding: 9px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
+        .copy { white-space: nowrap; }
+        .copy.done { background: var(--success); color: #fff; border-color: var(--success); }
+        .err { color: var(--danger); font-size: 13px; font-weight: 600; }
+        .retry { margin-left: 6px; }
+
+        /* Gallery */
+        .g-tools { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+        .g-tools input { flex: 1; min-width: 180px; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-size: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+        .g { border-radius: 14px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; transition: .15s; }
+        .g:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+        .g .ph { aspect-ratio: 1; background: var(--line) center/cover no-repeat; cursor: pointer; }
+        .g .bd { padding: 10px; }
+        .g .nm { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .g .dt { font-size: 11px; color: var(--muted); font-family: var(--mono); margin: 2px 0 8px; }
+        .g .acts { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+        .g .acts button { border: 1px solid var(--line); background: var(--card); color: var(--text); border-radius: 8px; padding: 7px 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .g .acts .del { color: var(--danger); }
+        .g .acts .copied { background: var(--success); color: #fff; border-color: var(--success); }
+        .empty { text-align: center; color: var(--muted); padding: 30px 10px; }
+
+        /* Gate */
+        .gate { max-width: 420px; margin: 40px auto; text-align: center; }
+        .gate svg { width: 92px; height: 92px; filter: drop-shadow(0 12px 24px rgba(14,95,216,.35)); }
+        .gate h1 { margin: 14px 0 4px; font-size: 24px; }
+        .gate input { width: 100%; margin: 20px 0 12px; padding: 13px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-size: 16px; text-align: center; letter-spacing: 2px; }
+        .gate .btn { width: 100%; }
+
+        #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(30px); opacity: 0; background: #0B1424; color: #fff; padding: 12px 18px; border-radius: 10px; font-size: 14px; font-weight: 600; z-index: 99; transition: .25s; pointer-events: none; border-left: 4px solid var(--accent); max-width: 90vw; }
+        #toast.show { opacity: 1; transform: translateX(-50%); }
+        .viewer { position: fixed; inset: 0; background: rgba(5,10,20,.85); z-index: 80; display: none; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; }
+        .viewer img { max-width: 100%; max-height: 90vh; border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+
+        @media (max-width: 640px) {
+            body { padding: 80px 10px 30px; }
+            .card { padding: 16px; border-radius: 14px; }
+            .drop { padding: 30px 14px; }
+            .brand small { display: none; }
+            .item { grid-template-columns: 56px 1fr; gap: 10px; }
+            .item img { width: 56px; height: 56px; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .hide-sm { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <svg width="0" height="0" style="position:absolute">
+        <defs>
+            <symbol id="logo" viewBox="0 0 120 120">
+                <defs>
+                    <linearGradient id="lbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#071633"/><stop offset=".55" stop-color="#0A3A8C"/><stop offset="1" stop-color="#0E5FD8"/></linearGradient>
+                    <linearGradient id="lfg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C9DCFF"/></linearGradient>
+                    <radialGradient id="lpel" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#FFC27A"/><stop offset="1" stop-color="#E9730C"/></radialGradient>
+                </defs>
+                <rect width="120" height="120" rx="28" fill="url(#lbg)"/>
+                <path d="M0 92 L92 0 H120 V12 L12 120 H0Z" fill="#fff" opacity=".05"/>
+                <path d="M34 26 H92 L84 43 H55 V53 H78 L70 69 H55 V94 H34 Z" fill="url(#lfg)"/>
+                <circle cx="87" cy="61" r="8" fill="url(#lpel)"/>
+            </symbol>
+        </defs>
+    </svg>
+
+    <header class="topbar">
+        <div class="brand">
+            <svg><use href="#logo"/></svg>
+            <div><b>Farco Image Drive</b><small>Farco International Co., Ltd. · ฝากรูปสินค้า</small></div>
+        </div>
+        <div class="top-actions">
+            <button class="icon-btn" id="btn-folder" title="เปิดโฟลเดอร์ใน Google Drive" style="display:none">📁 <span class="hide-sm">Drive</span></button>
+            <button class="icon-btn" id="btn-theme" title="สลับธีม">🌓</button>
+            <button class="icon-btn" id="btn-lock" title="ออกจากระบบ" style="display:none">🔒</button>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <!-- Gate -->
+        <section id="gate" class="card gate" style="display:none">
+            <svg><use href="#logo"/></svg>
+            <h1>Farco Image Drive</h1>
+            <div class="muted">ฝากรูปลง Google Drive ของบริษัท แล้วได้ลิงก์ไปใช้ในระบบคลังทันที</div>
+            <input type="password" id="key" placeholder="รหัสอัปโหลด" autocomplete="current-password">
+            <button class="btn btn-primary" id="btn-enter">เข้าใช้งาน</button>
+            <div id="gate-msg" class="err" style="margin-top:12px; min-height:18px"></div>
+        </section>
+
+        <!-- App -->
+        <section id="app" style="display:none">
+            <div class="tabs">
+                <button class="tab active" data-tab="upload">⬆️ อัปโหลด</button>
+                <button class="tab" data-tab="gallery">🖼️ รูปทั้งหมด</button>
+            </div>
+
+            <div class="pane active" id="pane-upload">
+                <div class="card">
+                    <div class="drop" id="drop" tabindex="0">
+                        <div class="big">⬆</div>
+                        <h3>ลากรูปมาวาง หรือ กดเพื่อเลือกรูป</h3>
+                        <div class="muted keys">หรือคัดลอกรูปแล้วกด <kbd>Ctrl</kbd>+<kbd>V</kbd> ที่หน้านี้ได้เลย · ทีละหลายรูปก็ได้</div>
+                        <div class="drop-btns">
+                            <button class="btn btn-primary" id="btn-pick" type="button">🖼️ เลือกรูป</button>
+                            <button class="btn btn-outline" id="btn-cam" type="button">📷 ถ่ายรูป</button>
+                        </div>
+                    </div>
+                    <input type="file" id="file" accept="image/*" multiple hidden>
+                    <input type="file" id="cam" accept="image/*" capture="environment" hidden>
+                    <div class="opts">
+                        <label><input type="checkbox" id="opt-resize" checked> ย่อรูปอัตโนมัติ (โหลดเร็ว ประหยัดพื้นที่)</label>
+                        <label>ขนาดสูงสุด
+                            <select id="opt-size"><option value="1200">1200 px</option><option value="1600" selected>1600 px</option><option value="2400">2400 px</option></select></label>
+                        <label><input type="checkbox" id="opt-copy" checked> คัดลอกลิงก์ให้อัตโนมัติ</label>
+                    </div>
+
+                    <div class="list-head" id="up-head" style="display:none">
+                        <b id="up-count"></b>
+                        <div style="display:flex; gap:8px">
+                            <button class="btn btn-outline btn-sm" id="btn-copy-all">📋 คัดลอกลิงก์ทั้งหมด</button>
+                            <button class="btn btn-outline btn-sm" id="btn-clear">ล้างรายการ</button>
+                        </div>
+                    </div>
+                    <div class="items" id="items"></div>
+                </div>
+                <p class="muted" style="text-align:center">นำลิงก์ไปวางในช่อง <b>"ลิงก์รูปภาพ"</b> ของหน้ารับเข้า/แก้ไขสินค้า หรือช่องโลโก้ในหน้าตั้งค่าของระบบคลัง</p>
+            </div>
+
+            <div class="pane" id="pane-gallery">
+                <div class="card">
+                    <div class="g-tools">
+                        <input id="q" placeholder="🔍 ค้นหาชื่อไฟล์…">
+                        <button class="btn btn-outline" id="btn-reload">🔄 รีเฟรช</button>
+                    </div>
+                    <div class="muted" id="g-info" style="margin-bottom:10px"></div>
+                    <div class="grid" id="grid"></div>
+                    <div style="text-align:center; margin-top:16px"><button class="btn btn-outline" id="btn-more" style="display:none">โหลดเพิ่ม</button></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="toast"></div>
+    <div class="viewer" id="viewer"><img alt=""></div>
+
+    <script>
+    'use strict';
+    // ⚠️ ใส่ลิงก์ /exec ของ Apps Script "Farco Image Drive"
+    const SCRIPT_URL = 'PASTE_IMAGE_DRIVE_WEB_APP_URL_HERE';
+    const MAX_PARALLEL = 3;
+
+    const $ = id => document.getElementById(id);
+    const LS = { key: 'farco_img_key', theme: 'farco_img_theme', opts: 'farco_img_opts' };
+    const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+    const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+    const lsDel = k => { try { localStorage.removeItem(k); } catch (e) {} };
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const fmtSize = b => b >= 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
+
+    let key = lsGet(LS.key) || '';
+    let uploaded = [], queue = [], running = 0, seq = 0;
+    let gOffset = 0, gTotal = 0, gFiles = [];
+
+    /* ---------- theme ---------- */
+    const theme = lsGet(LS.theme);
+    if (theme) document.documentElement.dataset.theme = theme;
+    $('btn-theme').onclick = () => {
+        const dark = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim().toUpperCase() === '#0A111E';
+        const next = dark ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next; lsSet(LS.theme, next);
+    };
+
+    /* ---------- toast ---------- */
+    let tT;
+    function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2200); }
+
+    /* ---------- api ---------- */
+    // หมายเหตุ: ห้ามใส่ upload progress listener — จะทำให้เบราว์เซอร์ส่ง preflight ซึ่ง Apps Script ไม่รองรับ
+    async function api(action, params = {}, onProgress) {
+        if (/^PASTE_/.test(SCRIPT_URL)) throw new Error('ยังไม่ได้ใส่ SCRIPT_URL ในไฟล์ index.html');
+        const body = JSON.stringify({ action, key, ...params });
+        let timer = null;
+        if (onProgress) {   // ความคืบหน้าโดยประมาณจากขนาดไฟล์
+            const t0 = Date.now(), est = Math.max(1500, body.length / 120);
+            timer = setInterval(() => onProgress(Math.min(0.92, 1 - Math.exp(-(Date.now() - t0) / est * 2))), 150);
+        }
+        try {
+            const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body });
+            let r;
+            try { r = await res.json(); } catch (e) { throw new Error('เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง (ตรวจว่า Deploy เป็น Anyone แล้ว)'); }
+            if (r.status === 'auth' || r.status === 'locked') { lock(r.message); throw new Error(r.message); }
+            if (onProgress) onProgress(1);
+            return r;
+        } catch (e) {
+            throw e instanceof TypeError ? new Error('เชื่อมต่อไม่ได้ ตรวจอินเทอร์เน็ต') : e;
+        } finally { if (timer) clearInterval(timer); }
+    }
+
+    /* ---------- gate ---------- */
+    function showApp(folderUrl) {
+        $('gate').style.display = 'none'; $('app').style.display = 'block';
+        $('btn-lock').style.display = '';
+        if (folderUrl) { $('btn-folder').style.display = ''; $('btn-folder').onclick = () => window.open(folderUrl, '_blank', 'noopener'); }
+    }
+    function lock(msg) {
+        key = ''; lsDel(LS.key);
+        $('app').style.display = 'none'; $('gate').style.display = 'block';
+        $('btn-lock').style.display = 'none'; $('btn-folder').style.display = 'none';
+        $('gate-msg').textContent = msg || '';
+        setTimeout(() => $('key').focus(), 50);
+    }
+    async function enter() {
+        const k = $('key').value.trim();
+        if (!k) return;
+        const b = $('btn-enter'); b.disabled = true; b.textContent = 'กำลังตรวจสอบ…'; $('gate-msg').textContent = '';
+        key = k;
+        try {
+            const r = await api('ping');
+            if (r.status === 'success') { lsSet(LS.key, k); $('key').value = ''; showApp(r.folderUrl); }
+            else $('gate-msg').textContent = r.message || 'เข้าใช้งานไม่ได้';
+        } catch (e) { $('gate-msg').textContent = e.message; }
+        finally { b.disabled = false; b.textContent = 'เข้าใช้งาน'; }
+    }
+    $('btn-enter').onclick = enter;
+    $('key').addEventListener('keydown', e => { if (e.key === 'Enter') enter(); });
+    $('btn-lock').onclick = () => { if (confirm('ออกจากระบบฝากรูป?')) lock(''); };
+
+    /* ---------- tabs ---------- */
+    document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+        document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
+        document.querySelectorAll('.pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + t.dataset.tab));
+        if (t.dataset.tab === 'gallery' && !gFiles.length) loadGallery(true);
+    });
+
+    /* ---------- options ---------- */
+    try { const o = JSON.parse(lsGet(LS.opts) || '{}');
+        if ('resize' in o) $('opt-resize').checked = o.resize; if (o.size) $('opt-size').value = o.size; if ('copy' in o) $('opt-copy').checked = o.copy; } catch (e) {}
+    ['opt-resize', 'opt-size', 'opt-copy'].forEach(id => $(id).addEventListener('change', () =>
+        lsSet(LS.opts, JSON.stringify({ resize: $('opt-resize').checked, size: $('opt-size').value, copy: $('opt-copy').checked }))));
+
+    /* ---------- input: pick / drop / paste ---------- */
+    const drop = $('drop');
+    $('btn-pick').onclick = e => { e.stopPropagation(); $('file').click(); };
+    $('btn-cam').onclick = e => { e.stopPropagation(); $('cam').click(); };
+    drop.onclick = () => $('file').click();
+    drop.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('file').click(); } };
+    ['file', 'cam'].forEach(id => $(id).onchange = e => { addFiles(e.target.files); e.target.value = ''; });
+    ['dragenter', 'dragover'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+    ['dragleave', 'drop'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); if (ev === 'drop' || !e.relatedTarget) drop.classList.remove('over'); }));
+    document.addEventListener('drop', e => { if (e.dataTransfer && e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
+    document.addEventListener('paste', e => {
+        if ($('app').style.display === 'none') return;
+        const files = [...(e.clipboardData ? e.clipboardData.items : [])].filter(i => i.kind === 'file' && i.type.startsWith('image/')).map(i => i.getAsFile()).filter(Boolean);
+        if (files.length) { e.preventDefault(); addFiles(files); toast(`วางรูป ${files.length} รูปแล้ว`); }
+    });
+
+    function addFiles(list) {
+        if ($('app').style.display === 'none') return;
+        const files = [...list].filter(f => f.type.startsWith('image/') || /\.(heic|heif)$/i.test(f.name));
+        if (!files.length) { toast('รองรับเฉพาะไฟล์รูปภาพ'); return; }
+        document.querySelector('.tab[data-tab="upload"]').click();
+        files.forEach(f => {
+            const it = { id: ++seq, file: f, name: f.name || `pasted-${Date.now()}.png`, status: 'wait', progress: 0 };
+            uploaded.unshift(it);
+            renderItem(it, true);
+            queue.push(it);
+        });
+        renderHead();
+        pump();
+    }
+
+    function pump() {
+        while (running < MAX_PARALLEL && queue.length) {
+            const it = queue.shift();
+            running++;
+            uploadOne(it).finally(() => { running--; pump(); if (!running && !queue.length) afterBatch(); });
+        }
+    }
+
+    /* ---------- image processing ---------- */
+    function loadImage(file) {
+        return new Promise((res, rej) => {
+            const url = URL.createObjectURL(file), img = new Image();
+            img.onload = () => res({ img, url });
+            img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('อ่านไฟล์รูปไม่ได้')); };
+            img.src = url;
+        });
+    }
+    async function prepare(file) {
+        const max = Number($('opt-size').value) || 1600;
+        const skip = !$('opt-resize').checked || /gif|svg/.test(file.type) || /\.(heic|heif)$/i.test(file.name) && !file.type;
+        let preview = '';
+        try {
+            const { img, url } = await loadImage(file);
+            preview = url;
+            const scale = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+            if (!skip && (scale < 1 || file.size > 1.5 * 1048576 || /heic|heif|bmp/.test(file.type))) {
+                const c = document.createElement('canvas');
+                c.width = Math.round(img.naturalWidth * scale); c.height = Math.round(img.naturalHeight * scale);
+                const ctx = c.getContext('2d');
+                const isPng = /png|webp/.test(file.type);
+                if (!isPng) { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); }
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(img, 0, 0, c.width, c.height);
+                const type = isPng ? 'image/webp' : 'image/jpeg';
+                const blob = await new Promise(r => c.toBlob(r, type, isPng ? 0.9 : 0.86));
+                if (blob && blob.size < file.size) return { blob, type: blob.type || type, preview, w: c.width, h: c.height };
+            }
+            return { blob: file, type: file.type || 'image/jpeg', preview, w: img.naturalWidth, h: img.naturalHeight };
+        } catch (e) {
+            return { blob: file, type: file.type || 'image/jpeg', preview, w: 0, h: 0 };
+        }
+    }
+    const toBase64 = blob => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(blob); });
+
+    async function uploadOne(it) {
+        try {
+            it.status = 'prep'; renderItem(it);
+            const p = await prepare(it.file);
+            it.preview = p.preview; it.newSize = p.blob.size; it.dim = p.w ? `${p.w}×${p.h}` : '';
+            it.status = 'up'; renderItem(it);
+            const data = await toBase64(p.blob);
+            const r = await api('upload', { name: it.name, mime: p.type, data }, f => { it.progress = f; setBar(it); });
+            if (r.status !== 'success') throw new Error(r.message || 'อัปโหลดไม่สำเร็จ');
+            it.result = r.file; it.status = 'done';
+            gFiles = []; // ให้แกลเลอรีโหลดใหม่ครั้งหน้า
+        } catch (e) {
+            it.status = 'error'; it.error = e.message;
+        }
+        renderItem(it); renderHead();
+    }
+
+    function afterBatch() {
+        const done = uploaded.filter(x => x.status === 'done' && !x.notified);
+        if (!done.length) return;
+        done.forEach(x => x.notified = true);
+        if ($('opt-copy').checked) {
+            const text = done.map(x => x.result.url).join('\n');
+            copyText(text).then(ok => toast(ok ? `อัปโหลดเสร็จ ${done.length} รูป · คัดลอกลิงก์แล้ว ✅` : `อัปโหลดเสร็จ ${done.length} รูป ✅`));
+        } else toast(`อัปโหลดเสร็จ ${done.length} รูป ✅`);
+    }
+
+    /* ---------- render upload list ---------- */
+    function renderHead() {
+        const n = uploaded.length, ok = uploaded.filter(x => x.status === 'done').length;
+        $('up-head').style.display = n ? '' : 'none';
+        $('up-count').textContent = `อัปโหลดแล้ว ${ok} / ${n} รูป`;
+    }
+    function setBar(it) { const b = document.querySelector(`#it-${it.id} .bar span`); if (b) b.style.width = Math.round(it.progress * 100) + '%'; }
+    function renderItem(it, isNew) {
+        let el = $('it-' + it.id);
+        if (!el) { el = document.createElement('div'); el.className = 'item'; el.id = 'it-' + it.id; $('items').prepend(el); }
+        const size = it.newSize && it.newSize !== it.file.size ? `${fmtSize(it.file.size)} → ${fmtSize(it.newSize)}` : fmtSize(it.file.size);
+        let body;
+        if (it.status === 'done') {
+            body = `<div class="linkrow"><input readonly value="${esc(it.result.url)}" onclick="this.select()">
+                <button class="btn btn-primary btn-sm copy" data-copy="${esc(it.result.url)}">📋 คัดลอก</button>
+                <a class="btn btn-outline btn-sm" href="${esc(it.result.view)}" target="_blank" rel="noopener" title="เปิดใน Drive">↗</a></div>`;
+        } else if (it.status === 'error') {
+            body = `<span class="err">⚠️ ${esc(it.error)}</span><button class="btn btn-outline btn-sm retry" data-retry="${it.id}">ลองใหม่</button>`;
+        } else {
+            body = `<div class="bar"><span style="width:${Math.round(it.progress * 100)}%"></span></div>
+                <div class="meta" style="margin:6px 0 0">${it.status === 'prep' ? 'กำลังย่อรูป…' : it.status === 'up' ? 'กำลังอัปโหลด…' : 'รอคิว…'}</div>`;
+        }
+        el.innerHTML = `<img src="${esc(it.preview || '')}" alt="" onerror="this.style.visibility='hidden'">
+            <div style="min-width:0"><div class="nm">${it.status === 'done' ? '✅ ' : ''}${esc(it.name)}</div>
+            <div class="meta">${size}${it.dim ? ' · ' + it.dim : ''}</div>${body}</div>`;
+    }
+
+    document.addEventListener('click', e => {
+        const c = e.target.closest('[data-copy]');
+        if (c) { copyText(c.dataset.copy).then(ok => { if (ok) { c.classList.add('done'); c.textContent = '✓ คัดลอกแล้ว'; setTimeout(() => { c.classList.remove('done', 'copied'); c.textContent = c.classList.contains('g-copy') ? '📋 คัดลอกลิงก์' : '📋 คัดลอก'; }, 1600); toast('คัดลอกลิงก์แล้ว — นำไปวางในเว็บคลังได้เลย'); } }); return; }
+        const r = e.target.closest('[data-retry]');
+        if (r) { const it = uploaded.find(x => x.id === Number(r.dataset.retry)); if (it) { it.status = 'wait'; it.progress = 0; renderItem(it); queue.push(it); pump(); } return; }
+        const d = e.target.closest('[data-del]');
+        if (d) { delFile(d.dataset.del); return; }
+        const v = e.target.closest('[data-view]');
+        if (v) { $('viewer').querySelector('img').src = v.dataset.view; $('viewer').style.display = 'flex'; }
+    });
+    $('viewer').onclick = () => { $('viewer').style.display = 'none'; $('viewer').querySelector('img').src = ''; };
+
+    $('btn-copy-all').onclick = () => {
+        const links = uploaded.filter(x => x.status === 'done').map(x => x.result.url);
+        if (!links.length) { toast('ยังไม่มีรูปที่อัปโหลดเสร็จ'); return; }
+        copyText(links.join('\n')).then(ok => toast(ok ? `คัดลอก ${links.length} ลิงก์แล้ว` : 'คัดลอกไม่สำเร็จ'));
+    };
+    $('btn-clear').onclick = () => {
+        uploaded = uploaded.filter(x => x.status === 'up' || x.status === 'prep' || x.status === 'wait');
+        $('items').innerHTML = ''; uploaded.slice().reverse().forEach(x => renderItem(x)); renderHead();
+    };
+
+    async function copyText(t) {
+        try { await navigator.clipboard.writeText(t); return true; }
+        catch (e) {
+            const ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            let ok = false; try { ok = document.execCommand('copy'); } catch (x) {}
+            ta.remove(); return ok;
+        }
+    }
+
+    /* ---------- gallery ---------- */
+    let qTimer;
+    $('q').addEventListener('input', () => { clearTimeout(qTimer); qTimer = setTimeout(() => loadGallery(true), 400); });
+    $('btn-reload').onclick = () => loadGallery(true);
+    $('btn-more').onclick = () => loadGallery(false);
+
+    async function loadGallery(reset) {
+        if (reset) { gOffset = 0; gFiles = []; $('grid').innerHTML = '<div class="empty" style="grid-column:1/-1">กำลังโหลด…</div>'; }
+        $('btn-more').disabled = true;
+        try {
+            const r = await api('list', { offset: gOffset, limit: 60, q: $('q').value.trim() });
+            if (r.status !== 'success') throw new Error(r.message);
+            gTotal = r.total; gFiles = gFiles.concat(r.files); gOffset = gFiles.length;
+            renderGallery();
+        } catch (e) {
+            $('grid').innerHTML = `<div class="empty" style="grid-column:1/-1">⚠️ ${esc(e.message)}</div>`;
+        } finally { $('btn-more').disabled = false; }
+    }
+    function renderGallery() {
+        $('g-info').textContent = gTotal ? `ทั้งหมด ${gTotal.toLocaleString('th-TH')} รูป · กดรูปเพื่อดูภาพใหญ่` : '';
+        $('grid').innerHTML = gFiles.length ? gFiles.map(f => `
+            <div class="g" id="g-${esc(f.id)}">
+                <div class="ph" style="background-image:url('${esc(f.thumb)}')" data-view="${esc(f.url)}" title="${esc(f.name)}"></div>
+                <div class="bd"><div class="nm" title="${esc(f.name)}">${esc(f.name.replace(/^\d{8}-\d{6}_/, ''))}</div>
+                <div class="dt">${new Date(f.created).toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' })} · ${fmtSize(f.size)}</div>
+                <div class="acts"><button class="g-copy" data-copy="${esc(f.url)}">📋 คัดลอกลิงก์</button><button class="del" data-del="${esc(f.id)}" title="ลบ">🗑</button></div></div>
+            </div>`).join('') : '<div class="empty" style="grid-column:1/-1">ยังไม่มีรูป — อัปโหลดรูปแรกได้ที่แท็บ "อัปโหลด"</div>';
+        $('btn-more').style.display = gFiles.length < gTotal ? '' : 'none';
+    }
+    async function delFile(id) {
+        const f = gFiles.find(x => x.id === id);
+        if (!confirm(`ลบรูป "${f ? f.name : id}"?\nรูปจะย้ายไปถังขยะของ Google Drive — สินค้าที่ใช้ลิงก์นี้อยู่จะไม่มีรูป`)) return;
+        try {
+            const r = await api('delete', { id });
+            if (r.status !== 'success') throw new Error(r.message);
+            gFiles = gFiles.filter(x => x.id !== id); gTotal = Math.max(0, gTotal - 1); renderGallery(); toast('ลบรูปแล้ว');
+        } catch (e) { toast('ลบไม่สำเร็จ: ' + e.message); }
+    }
+
+    /* ---------- boot ---------- */
+    if (key) {
+        showApp('');
+        api('ping').then(r => { if (r.status === 'success') showApp(r.folderUrl); }).catch(() => {});
+    } else lock('');
+    </script>
+</body>
+</html>
