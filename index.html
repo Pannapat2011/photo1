@@ -3,616 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0B3322">
-    <title>คลังรูป สยาม ฮาร์เวสต์ พรีเมี่ยม</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='28' fill='%230E4A2E'/%3E%3Cpath d='M18 50 A42 42 0 0 0 102 50 Z' fill='%238FE0A8'/%3E%3Cpath d='M27 50 A33 33 0 0 0 93 50 Z' fill='%23E8445A'/%3E%3C/svg%3E">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>Farco Image Drive</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='28' fill='%230A3A8C'/%3E%3Cpath d='M34 26 H92 L84 43 H55 V53 H78 L70 69 H55 V94 H34 Z' fill='%23fff'/%3E%3Ccircle cx='87' cy='61' r='8' fill='%23F28C28'/%3E%3C/svg%3E">
     <style>
-        /* =========================================================
-           คลังรูป สยาม ฮาร์เวสต์ พรีเมี่ยม — โต๊ะไฟสำหรับฝากรูปสินค้า (บริษัท สยาม ฮาร์เวสต์ พรีเมี่ยม จำกัด)
-           แบรนด์: เขียวเปลือกแตงโม + แดงเนื้อแตงโม · ฟอนต์ Prompt เหมือนเว็บคลังหลัก
-           ========================================================= */
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
         :root {
-            --ink: #0B3322;          /* เขียวเปลือกแตงโม — โต๊ะไฟ */
-            --blue: #2563EB;         /* น้ำเงินเดียวกับเว็บคลัง — การกระทำหลัก */
-            --orange: #EC4459;       /* แดงเนื้อแตงโม — ความคืบหน้า/ปุ่มเด่น (ชื่อตัวแปรเดิม) */
-            --paper: #F2F6F3;        /* พื้นหน้า */
-            --sheet: #FFFFFF;        /* แผ่นเนื้อหา */
-            --line: #DFE7E2;
-            --line-strong: #C6D3CB;
-            --text: #0F2219;
-            --muted: #5A6B62;
-            --ok: #12925A;
-            --bad: #D23A2C;
-            --focus: 0 0 0 3px color-mix(in srgb, var(--blue) 35%, transparent);
+            --bg: #EDF0F4; --dot: rgba(14,95,216,.10);
+            --card: #FFFFFF; --surface: #F5F7FA; --line: #DCE1E8;
+            --text: #0B1424; --muted: #5B6676;
+            --primary: #0E5FD8; --accent: #F28C28; --success: #0F9D58; --danger: #D93025;
+            --shadow: 0 1px 2px rgba(16,24,40,.05), 0 6px 18px rgba(16,24,40,.06);
             --mono: 'IBM Plex Mono', ui-monospace, monospace;
-            --ease: cubic-bezier(.2, .8, .2, 1);
         }
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme="light"]) {
-                --paper: #07120D; --sheet: #0E1D16; --line: #1A3328; --line-strong: #284A3B;
-                --text: #E8F2EC; --muted: #8FA79A; --blue: #5B93F7; --ink: #03140C;
+                --bg: #0A111E; --dot: rgba(96,165,250,.07); --card: #121C2C; --surface: #172338; --line: #23324A;
+                --text: #E8EEF7; --muted: #8D9AB0; --primary: #3B82F6;
             }
         }
         :root[data-theme="dark"] {
-            --paper: #07120D; --sheet: #0E1D16; --line: #1A3328; --line-strong: #284A3B;
-            --text: #E8F2EC; --muted: #8FA79A; --blue: #5B93F7; --ink: #03140C;
+            --bg: #0A111E; --dot: rgba(96,165,250,.07); --card: #121C2C; --surface: #172338; --line: #23324A;
+            --text: #E8EEF7; --muted: #8D9AB0; --primary: #3B82F6;
         }
-
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html { background: var(--paper); }
         body {
-            margin: 0; min-height: 100vh; background: var(--paper); color: var(--text);
-            font: 400 16px/1.6 'Prompt', system-ui, sans-serif; font-variant-numeric: tabular-nums;
-            -webkit-font-smoothing: antialiased;
+            margin: 0; font-family: 'IBM Plex Sans Thai', sans-serif; color: var(--text);
+            background-color: var(--bg); background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px); background-size: 18px 18px;
+            min-height: 100vh; padding: 88px 16px 40px;
         }
-        button, input, select { font: inherit; color: inherit; }
-        button { cursor: pointer; }
-        :focus-visible { outline: none; box-shadow: var(--focus); }
-        [hidden] { display: none !important; }
-        .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+        button, input { font-family: inherit; }
 
-        /* ---------- แถบบน ---------- */
-        .top {
-            position: sticky; top: 0; z-index: 40; height: 64px;
-            display: flex; align-items: center; gap: 16px; padding: 0 max(20px, env(safe-area-inset-left));
-            background: color-mix(in srgb, var(--paper) 82%, transparent); backdrop-filter: saturate(1.4) blur(14px);
-            border-bottom: 1px solid var(--line);
-        }
-        .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; color: inherit; min-width: 0; }
-        .brand svg { width: 34px; height: 34px; flex-shrink: 0; }
-        .brand > div { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .brand b { font-weight: 600; font-size: 16px; letter-spacing: -.1px; white-space: nowrap; }
-        .brand span { color: var(--muted); font-size: 13px; white-space: nowrap; }
-        .nav { display: flex; gap: 2px; margin-left: 18px; flex-shrink: 0; }
-        .nav button {
-            border: 0; background: none; padding: 8px 14px; border-radius: 9px; font-size: 15px; font-weight: 500; color: var(--muted); white-space: nowrap;
-            display: inline-flex; align-items: center; gap: 8px; transition: color .2s, background .2s;
-        }
-        .nav button:hover { color: var(--text); background: color-mix(in srgb, var(--text) 5%, transparent); }
-        .nav button[aria-selected="true"] { color: var(--text); background: var(--sheet); box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgba(8,40,26,.06); }
-        .nav .count { font-size: 12px; font-weight: 600; color: var(--muted); background: color-mix(in srgb, var(--text) 7%, transparent); padding: 0 7px; border-radius: 99px; line-height: 20px; }
-        .top-actions { margin-left: auto; display: flex; gap: 6px; flex-shrink: 0; }
-        .ibtn {
-            width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: var(--sheet);
-            display: grid; place-items: center; color: var(--muted); transition: color .2s, border-color .2s;
-        }
-        .ibtn:hover { color: var(--text); border-color: var(--line-strong); }
-        .ibtn svg { width: 18px; height: 18px; }
+        .topbar { position: fixed; inset: 0 0 auto 0; height: 68px; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 18px; background: var(--card); border-bottom: 1px solid var(--line); }
+        .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .brand svg { width: 44px; height: 44px; flex-shrink: 0; filter: drop-shadow(0 4px 10px rgba(14,95,216,.3)); }
+        .brand b { display: block; font-size: 17px; letter-spacing: .2px; white-space: nowrap; }
+        .brand small { display: block; font-size: 11px; color: var(--muted); letter-spacing: 1.6px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .top-actions { display: flex; gap: 8px; }
+        .icon-btn { height: 40px; min-width: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; font-weight: 600; font-size: 14px; }
+        .icon-btn:hover { border-color: var(--primary); color: var(--primary); }
 
-        main { max-width: 1120px; margin: 0 auto; padding: 28px 20px 120px; }
+        .wrap { max-width: 980px; margin: 0 auto; }
+        .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 24px; margin-bottom: 18px; }
+        h2 { margin: 0 0 4px; font-size: 21px; display: flex; align-items: center; gap: 10px; }
+        h2::before { content: ''; width: 6px; height: 22px; border-radius: 3px; background: linear-gradient(var(--primary), var(--accent)); }
+        .muted { color: var(--muted); font-size: 14px; }
 
-        /* ---------- ปุ่ม ---------- */
-        .btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap;
-            height: 44px; padding: 0 18px; border-radius: 11px; border: 1px solid transparent;
-            font-size: 15px; font-weight: 600; text-decoration: none; transition: transform .15s var(--ease), background .2s, border-color .2s, color .2s;
-        }
-        .btn:active:not(:disabled) { transform: scale(.97); }
-        .btn:disabled { opacity: .5; cursor: not-allowed; }
-        .btn svg { width: 18px; height: 18px; }
-        .btn-blue { background: var(--blue); color: #fff; }
-        .btn-blue:hover:not(:disabled) { background: color-mix(in srgb, var(--blue) 88%, #000); }
-        .btn-orange { background: var(--orange); color: #fff; }
-        .btn-orange:hover:not(:disabled) { background: #F25C6F; }
-        .btn-line { background: var(--sheet); border-color: var(--line-strong); color: var(--text); }
-        .btn-line:hover:not(:disabled) { border-color: var(--text); }
-        .btn-ghost-light { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18); color: #fff; }
-        .btn-ghost-light:hover { background: rgba(255,255,255,.14); }
-        .btn-sm { height: 34px; padding: 0 12px; font-size: 13.5px; border-radius: 9px; }
-        .btn-sm svg { width: 15px; height: 15px; }
-        .btn.ok { background: var(--ok); border-color: var(--ok); color: #fff; }
+        .tabs { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--line); padding: 4px; border-radius: 12px; margin-bottom: 18px; }
+        .tab { flex: 1; border: none; background: transparent; padding: 11px; border-radius: 9px; font-weight: 600; font-size: 15px; color: var(--muted); cursor: pointer; }
+        .tab.active { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(14,95,216,.25); }
+        .pane { display: none; } .pane.active { display: block; animation: up .25s ease; }
+        @keyframes up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-        /* ---------- ประตูเข้า ---------- */
-        .gate {
-            min-height: calc(100vh - 64px); display: grid; grid-template-columns: 1.1fr 1fr;
-            width: 100vw; margin: -28px 0 -120px calc(50% - 50vw);
-        }
-        .gate-art {
-            position: relative; overflow: hidden; background: var(--ink); color: #fff; padding: 56px 52px;
-            display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .gate-art::before {
-            content: ''; position: absolute; inset: 0; opacity: .55;
-            background-image: linear-gradient(rgba(140,230,175,.10) 1px, transparent 1px), linear-gradient(90deg, rgba(140,230,175,.10) 1px, transparent 1px);
-            background-size: 32px 32px; mask-image: radial-gradient(120% 90% at 30% 30%, #000 30%, transparent 75%);
-        }
-        .gate-art .mark { position: relative; width: 84px; height: 84px; }
-        .gate-art h1 { position: relative; margin: 0; font-size: clamp(34px, 4.4vw, 56px); line-height: 1.12; font-weight: 600; letter-spacing: -1px; max-width: 12ch; }
-        .gate-art p { position: relative; margin: 18px 0 0; color: rgba(255,255,255,.66); font-size: 17px; max-width: 34ch; }
-        .gate-art .dot { position: absolute; right: -110px; top: -110px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #FF8595, #E0314A 72%); box-shadow: 0 0 0 12px #F4FFF6, 0 0 0 30px #2E9E5B, 0 0 0 34px #8FE0A8; }
-        .gate-form { display: flex; align-items: center; justify-content: center; padding: 40px 28px; }
-        .gate-form form { width: 100%; max-width: 360px; }
-        .gate-form h2 { margin: 0 0 6px; font-size: 24px; font-weight: 600; letter-spacing: -.3px; }
-        .gate-form .lead { margin: 0 0 28px; color: var(--muted); }
-        .field label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; }
-        .field-wrap { position: relative; }
-        .field input {
-            width: 100%; height: 52px; padding: 0 48px 0 16px; border-radius: 12px; border: 1px solid var(--line-strong);
-            background: var(--sheet); font-size: 17px; letter-spacing: 1px; transition: border-color .2s, box-shadow .2s;
-        }
-        .field input:focus { outline: none; border-color: var(--blue); box-shadow: var(--focus); }
-        .field .peek { position: absolute; right: 6px; top: 6px; width: 40px; height: 40px; border: 0; background: none; color: var(--muted); border-radius: 9px; display: grid; place-items: center; }
-        .field .peek svg { width: 19px; height: 19px; }
-        .gate-form .btn { width: 100%; height: 52px; margin-top: 16px; font-size: 16px; }
-        .gate-msg { min-height: 24px; margin-top: 14px; color: var(--bad); font-size: 14px; font-weight: 500; }
-        .gate-msg.shake { animation: shake .4s; }
-        @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+        /* Drop zone */
+        .drop { position: relative; border: 2px dashed color-mix(in srgb, var(--primary) 45%, var(--line)); border-radius: 18px; padding: 44px 20px; text-align: center; cursor: pointer;
+            background: linear-gradient(160deg, color-mix(in srgb, var(--primary) 6%, var(--card)), var(--card)); transition: .2s; overflow: hidden; }
+        .drop:hover, .drop.over { border-color: var(--primary); border-style: solid; background: color-mix(in srgb, var(--primary) 10%, var(--card)); }
+        .drop.over { transform: scale(1.01); }
+        .drop .big { width: 74px; height: 74px; margin: 0 auto 14px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 34px; color: #fff;
+            background: linear-gradient(135deg, #0A3A8C, #0E5FD8); box-shadow: 0 10px 24px rgba(14,95,216,.35); }
+        .drop h3 { margin: 0 0 6px; font-size: 20px; }
+        .drop .keys { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+        kbd { font-family: var(--mono); font-size: 12px; padding: 2px 7px; border-radius: 6px; border: 1px solid var(--line); border-bottom-width: 2px; background: var(--card); color: var(--text); }
+        .drop-btns { display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+        .btn { border: 1px solid transparent; padding: 12px 20px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: .15s; }
+        .btn:hover:not(:disabled) { filter: brightness(1.07); transform: translateY(-1px); }
+        .btn:disabled { opacity: .55; cursor: not-allowed; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-outline { background: var(--card); border-color: var(--line); color: var(--text); }
+        .btn-outline:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); filter: none; }
+        .btn-sm { padding: 7px 12px; font-size: 13px; }
+        .opts { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 14px; font-size: 14px; color: var(--muted); }
+        .opts label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+        .opts input { width: 17px; height: 17px; accent-color: var(--primary); margin: 0; }
+        .opts select { font-family: inherit; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); }
 
-        /* ---------- หัวข้อของแต่ละหน้า ---------- */
-        .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin: 4px 0 22px; flex-wrap: wrap; }
-        .page-head h1 { margin: 0; font-size: 30px; line-height: 1.2; font-weight: 600; letter-spacing: -.6px; }
-        .page-head p { margin: 4px 0 0; color: var(--muted); }
+        /* Upload list */
+        .list-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 22px 0 10px; flex-wrap: wrap; }
+        .list-head b { font-size: 15px; }
+        .items { display: grid; gap: 10px; }
+        .item { display: grid; grid-template-columns: 72px 1fr; gap: 14px; padding: 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); align-items: center; animation: up .25s ease; }
+        .item img { width: 72px; height: 72px; object-fit: cover; border-radius: 10px; background: var(--line); }
+        .item .nm { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item .meta { font-size: 12px; color: var(--muted); font-family: var(--mono); margin: 2px 0 8px; }
+        .bar { height: 6px; border-radius: 6px; background: var(--line); overflow: hidden; }
+        .bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width .2s; }
+        .linkrow { display: flex; gap: 6px; }
+        .linkrow input { flex: 1; min-width: 0; font-family: var(--mono); font-size: 12px; padding: 9px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
+        .copy { white-space: nowrap; }
+        .copy.done { background: var(--success); color: #fff; border-color: var(--success); }
+        .err { color: var(--danger); font-size: 13px; font-weight: 600; }
+        .retry { margin-left: 6px; }
 
-        /* ---------- โต๊ะไฟ (จุดเด่นของหน้า) ---------- */
-        .table {
-            position: relative; overflow: hidden; border-radius: 22px; background: var(--ink); color: #fff;
-            min-height: 320px; padding: 44px 40px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 32px;
-            outline: none; cursor: pointer; isolation: isolate; border: 1px solid rgba(150,230,180,.14);
-            box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 24px 60px -24px rgba(8,40,26,.55);
-        }
-        .table::before {   /* ตารางเส้นแบบแผ่นรองตัด */
-            content: ''; position: absolute; inset: 0; z-index: -1;
-            background-image: linear-gradient(rgba(140,230,175,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(140,230,175,.09) 1px, transparent 1px);
-            background-size: 28px 28px; transition: opacity .3s;
-            mask-image: radial-gradient(110% 120% at 75% 50%, #000 25%, transparent 80%);
-        }
-        .table::after {    /* แสงจากใต้โต๊ะ */
-            content: ''; position: absolute; z-index: -1; right: 6%; top: 50%; width: 420px; height: 420px; transform: translateY(-50%);
-            background: radial-gradient(circle, rgba(46,170,96,.5), transparent 65%); transition: background .3s, transform .4s var(--ease);
-        }
-        .table h2 { margin: 0; font-size: clamp(26px, 3.2vw, 38px); line-height: 1.18; font-weight: 600; letter-spacing: -.8px; max-width: 16ch; }
-        .table p { margin: 14px 0 0; color: rgba(255,255,255,.66); max-width: 44ch; }
-        .table kbd {
-            font-family: var(--mono); font-size: 12.5px; padding: 1px 7px; border-radius: 6px;
-            border: 1px solid rgba(255,255,255,.22); border-bottom-width: 2px; color: #fff; background: rgba(255,255,255,.06);
-        }
-        .table .acts { display: flex; gap: 10px; margin-top: 26px; flex-wrap: wrap; }
-        .frame {   /* กรอบรูปที่รอวาง */
-            width: 210px; aspect-ratio: 4 / 5; border-radius: 14px; position: relative;
-            border: 1.5px dashed rgba(255,255,255,.28); display: grid; place-items: center; transition: border-color .3s, transform .4s var(--ease);
-        }
-        .frame svg { width: 64px; height: 64px; }
-        .frame .pel { position: absolute; right: 18px; bottom: 18px; width: 14px; height: 14px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 6px rgba(236,68,89,.18); }
-        .table:hover .frame, .table:focus-visible .frame { border-color: rgba(255,255,255,.5); }
-        .table:focus-visible { box-shadow: 0 0 0 3px var(--orange); }
-        .table.over::after { background: radial-gradient(circle, rgba(236,68,89,.6), transparent 65%); transform: translateY(-50%) scale(1.15); }
-        .table.over .frame { border-color: var(--orange); border-style: solid; transform: scale(1.04) rotate(-2deg); }
-        .table.over .pel { animation: pel 1s infinite; }
-        @keyframes pel { 50% { box-shadow: 0 0 0 14px rgba(236,68,89,0); } }
+        /* Gallery */
+        .g-tools { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+        .g-tools input { flex: 1; min-width: 180px; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-size: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+        .g { border-radius: 14px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; transition: .15s; }
+        .g:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+        .g .ph { aspect-ratio: 1; background: var(--line) center/cover no-repeat; cursor: pointer; }
+        .g .bd { padding: 10px; }
+        .g .nm { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .g .dt { font-size: 11px; color: var(--muted); font-family: var(--mono); margin: 2px 0 8px; }
+        .g .acts { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+        .g .acts button { border: 1px solid var(--line); background: var(--card); color: var(--text); border-radius: 8px; padding: 7px 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .g .acts .del { color: var(--danger); }
+        .g .acts .copied { background: var(--success); color: #fff; border-color: var(--success); }
+        .empty { text-align: center; color: var(--muted); padding: 30px 10px; }
 
-        /* ตัวเลือก */
-        .opts { display: flex; gap: 10px 26px; flex-wrap: wrap; align-items: center; margin: 18px 4px 0; color: var(--muted); font-size: 14.5px; }
-        .sw { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
-        .sw input { appearance: none; margin: 0; width: 38px; height: 22px; border-radius: 99px; background: var(--line-strong); position: relative; cursor: pointer; transition: background .2s; flex-shrink: 0; }
-        .sw input::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .25s var(--ease); }
-        .sw input:checked { background: var(--blue); }
-        .sw input:checked::after { transform: translateX(16px); }
-        .sizes { display: inline-flex; align-items: center; gap: 10px; }
-        .seg { display: inline-flex; padding: 3px; border-radius: 10px; background: color-mix(in srgb, var(--text) 6%, transparent); }
-        .seg button { border: 0; background: none; padding: 4px 11px; border-radius: 7px; font-size: 13.5px; font-weight: 500; color: var(--muted); }
-        .seg button[aria-pressed="true"] { background: var(--sheet); color: var(--text); box-shadow: 0 1px 2px rgba(8,40,26,.12); }
-        .seg.off { opacity: .45; pointer-events: none; }
+        /* Gate */
+        .gate { max-width: 420px; margin: 40px auto; text-align: center; }
+        .gate svg { width: 92px; height: 92px; filter: drop-shadow(0 12px 24px rgba(14,95,216,.35)); }
+        .gate h1 { margin: 14px 0 4px; font-size: 24px; }
+        .gate input { width: 100%; margin: 20px 0 12px; padding: 13px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-size: 16px; text-align: center; letter-spacing: 2px; }
+        .gate .btn { width: 100%; }
 
-        /* ---------- รายการอัปโหลดรอบนี้ ---------- */
-        .tray { margin-top: 34px; background: var(--sheet); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
-        .tray-head { display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-        .tray-head h3 { margin: 0; font-size: 16px; font-weight: 600; }
-        .tray-head .sub { color: var(--muted); font-size: 14px; }
-        .tray-head .sp { flex: 1; }
-        .total-bar { height: 3px; background: var(--line); }
-        .total-bar span { display: block; height: 100%; width: 0; background: var(--orange); transition: width .4s var(--ease); }
-        .row {
-            display: grid; grid-template-columns: 60px minmax(0, 1fr) minmax(0, 1.25fr); gap: 18px; align-items: center;
-            padding: 14px 20px; border-top: 1px solid var(--line);
-        }
-        .row:first-child { border-top: 0; }
-        .row.enter { animation: rowIn .35s var(--ease); }
-        @keyframes rowIn { from { opacity: 0; transform: translateY(-6px); } }
-        .thumb { position: relative; width: 60px; height: 60px; border-radius: 12px; overflow: hidden; background: var(--line); }
-        .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter .3s; }
-        .row:not(.done) .thumb img { filter: saturate(.4) brightness(.75); }
-        .ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-        .ring circle { fill: none; stroke-width: 4; }
-        .ring .bg { stroke: rgba(255,255,255,.35); }
-        .ring .fg { stroke: var(--orange); stroke-linecap: round; stroke-dasharray: 138; stroke-dashoffset: 138; transition: stroke-dashoffset .25s linear; }
-        .thumb .tick { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(18,146,90,.0); opacity: 0; transition: opacity .3s; }
-        .row.done .thumb .tick { animation: tick 1.4s var(--ease) forwards; }
-        @keyframes tick { 0% { opacity: 0; background: rgba(18,146,90,.75); } 20%, 60% { opacity: 1; background: rgba(18,146,90,.75); } 100% { opacity: 0; } }
-        .thumb .tick svg { width: 26px; height: 26px; color: #fff; }
-        .r-name { font-weight: 500; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .r-meta { color: var(--muted); font-size: 13.5px; display: flex; gap: 12px; flex-wrap: wrap; }
-        .save { color: var(--ok); font-weight: 600; }
-        .r-state { font-size: 14px; color: var(--muted); }
-        .r-state.bad { color: var(--bad); font-weight: 500; }
-        .link { display: flex; gap: 6px; min-width: 0; }
-        .link input {
-            flex: 1; min-width: 0; height: 34px; padding: 0 10px; border-radius: 9px; border: 1px solid var(--line);
-            background: color-mix(in srgb, var(--text) 3%, var(--sheet)); font: 400 12.5px var(--mono); color: var(--muted);
-        }
-        .link input:focus { outline: none; border-color: var(--blue); color: var(--text); }
+        #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(30px); opacity: 0; background: #0B1424; color: #fff; padding: 12px 18px; border-radius: 10px; font-size: 14px; font-weight: 600; z-index: 99; transition: .25s; pointer-events: none; border-left: 4px solid var(--accent); max-width: 90vw; }
+        #toast.show { opacity: 1; transform: translateX(-50%); }
+        .viewer { position: fixed; inset: 0; background: rgba(5,10,20,.85); z-index: 80; display: none; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; }
+        .viewer img { max-width: 100%; max-height: 90vh; border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
 
-        .hint { margin: 22px 4px 0; color: var(--muted); font-size: 14px; max-width: 70ch; }
-
-        /* ---------- คลังรูป ---------- */
-        .lib-tools { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
-        .search { position: relative; flex: 1; min-width: 220px; }
-        .search svg { position: absolute; left: 14px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
-        .search input { width: 100%; height: 44px; padding: 0 44px 0 42px; border-radius: 11px; border: 1px solid var(--line-strong); background: var(--sheet); font-size: 15px; }
-        .search input:focus { outline: none; border-color: var(--blue); box-shadow: var(--focus); }
-        .search kbd { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font: 500 12px var(--mono); color: var(--muted); border: 1px solid var(--line-strong); border-radius: 6px; padding: 0 6px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 22px 16px; }
-        .tile { position: relative; min-width: 0; }
-        .tile .ph {
-            position: relative; display: block; width: 100%; aspect-ratio: 1; border: 0; padding: 0; border-radius: 14px; overflow: hidden;
-            background: var(--line); cursor: zoom-in;
-        }
-        .tile .ph img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s var(--ease), opacity .4s; opacity: 0; }
-        .tile .ph img.ld { opacity: 1; }
-        .tile:hover .ph img { transform: scale(1.04); }
-        .tile.sel .ph { box-shadow: 0 0 0 3px var(--blue); }
-        .pick {
-            position: absolute; top: 9px; left: 9px; z-index: 2; width: 26px; height: 26px; border-radius: 8px; border: 0;
-            background: rgba(8,40,26,.45); backdrop-filter: blur(6px); display: grid; place-items: center; opacity: 0; transition: opacity .2s, background .2s;
-        }
-        .pick svg { width: 15px; height: 15px; color: #fff; opacity: 0; }
-        .tile:hover .pick, .tile .pick:focus-visible, .selecting .pick { opacity: 1; }
-        .tile.sel .pick { background: var(--blue); opacity: 1; }
-        .tile.sel .pick svg { opacity: 1; }
-        .t-info { display: flex; align-items: flex-start; gap: 6px; margin-top: 9px; }
-        .t-info > div { flex: 1; min-width: 0; }
-        .t-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .t-date { font-size: 12.5px; color: var(--muted); }
-        .t-copy { flex-shrink: 0; width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--line); background: var(--sheet); color: var(--muted); display: grid; place-items: center; transition: color .2s, border-color .2s, background .2s; }
-        .t-copy:hover { color: var(--blue); border-color: var(--blue); }
-        .t-copy.ok { background: var(--ok); border-color: var(--ok); color: #fff; }
-        .t-copy svg { width: 15px; height: 15px; }
-        .skel .ph { background: linear-gradient(100deg, var(--line) 40%, color-mix(in srgb, var(--line) 50%, var(--sheet)) 50%, var(--line) 60%) 0 0 / 200% 100%; animation: sk 1.3s linear infinite; cursor: default; }
-        .skel .bar1, .skel .bar2 { height: 10px; border-radius: 5px; background: var(--line); margin-top: 12px; width: 70%; }
-        .skel .bar2 { width: 40%; margin-top: 8px; }
-        @keyframes sk { to { background-position: -200% 0; } }
-        .empty { grid-column: 1 / -1; text-align: center; padding: 70px 20px; color: var(--muted); }
-        .empty b { display: block; color: var(--text); font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-        .empty .btn { margin-top: 18px; }
-        .more { display: flex; justify-content: center; margin-top: 30px; }
-
-        /* แถบเลือกหลายรูป */
-        .selbar {
-            position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); z-index: 60; transform: translate(-50%, 140%);
-            display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 18px; border-radius: 16px; background: var(--ink); color: #fff;
-            box-shadow: 0 18px 40px -12px rgba(3,16,10,.6); transition: transform .35s var(--ease); max-width: calc(100vw - 24px);
-        }
-        .selbar:not(.on) { visibility: hidden; transition: transform .35s var(--ease), visibility 0s .35s; }
-        .selbar.on { transform: translate(-50%, 0); }
-        .selbar b { font-weight: 600; margin-right: 8px; white-space: nowrap; }
-        .selbar .btn-sm { height: 36px; }
-        .btn-danger-l { background: rgba(255,90,70,.14); color: #FFB4A8; border-color: rgba(255,120,100,.3); }
-        .btn-danger-l:hover { background: rgba(255,90,70,.24); }
-
-        /* ---------- ม่านตอนลากไฟล์ ---------- */
-        .veil {
-            position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; pointer-events: none;
-            background: color-mix(in srgb, var(--ink) 78%, transparent); backdrop-filter: blur(4px); opacity: 0; transition: opacity .2s;
-        }
-        .veil.on { opacity: 1; }
-        .veil div { color: #fff; text-align: center; font-size: 26px; font-weight: 600; letter-spacing: -.3px; }
-        .veil div::before { content: ''; display: block; width: 18px; height: 18px; margin: 0 auto 18px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 10px rgba(236,68,89,.2), 0 0 0 22px rgba(236,68,89,.08); }
-
-        /* ---------- ดูรูปใหญ่ ---------- */
-        .lb { position: fixed; inset: 0; z-index: 80; background: rgba(2,10,6,.94); display: none; flex-direction: column; }
-        .lb.on { display: flex; animation: fade .2s; }
-        @keyframes fade { from { opacity: 0; } }
-        .lb-stage { flex: 1; min-height: 0; display: grid; place-items: center; padding: 24px 76px 8px; position: relative; }
-        .lb-stage img { max-width: 100%; max-height: 100%; border-radius: 6px; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
-        .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); color: #fff; display: grid; place-items: center; }
-        .lb-nav:hover { background: rgba(255,255,255,.14); }
-        .lb-nav svg { width: 22px; height: 22px; }
-        .lb-nav.prev { left: 16px; } .lb-nav.next { right: 16px; }
-        .lb-bar { display: flex; align-items: center; gap: 12px; padding: 14px 20px max(16px, env(safe-area-inset-bottom)); color: #fff; flex-wrap: wrap; }
-        .lb-bar .t { flex: 1; min-width: 180px; }
-        .lb-bar .t b { display: block; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .lb-bar .t span { color: rgba(255,255,255,.55); font-size: 13.5px; }
-        .lb-close { position: absolute; top: 14px; right: 14px; z-index: 2; }
-
-        /* ---------- กล่องยืนยัน ---------- */
-        .dlg { position: fixed; inset: 0; z-index: 95; display: none; place-items: center; padding: 20px; background: rgba(3,16,10,.55); backdrop-filter: blur(3px); }
-        .dlg.on { display: grid; animation: fade .15s; }
-        .dlg-box { width: 100%; max-width: 400px; background: var(--sheet); border-radius: 18px; padding: 26px 24px 20px; box-shadow: 0 30px 70px -20px rgba(3,16,10,.6); animation: pop .25s var(--ease); }
-        @keyframes pop { from { transform: scale(.96); opacity: 0; } }
-        .dlg-box h3 { margin: 0 0 8px; font-size: 19px; font-weight: 600; }
-        .dlg-box p { margin: 0; color: var(--muted); font-size: 15px; }
-        .dlg-acts { display: flex; justify-content: flex-end; gap: 8px; margin-top: 22px; }
-        .btn-danger { background: var(--bad); color: #fff; }
-
-        /* ---------- แจ้งเตือน ---------- */
-        .toasts { position: fixed; left: 50%; bottom: max(24px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 99; display: grid; gap: 8px; justify-items: center; pointer-events: none; width: max-content; max-width: calc(100vw - 24px); }
-        .toast {
-            display: flex; align-items: center; gap: 10px; padding: 11px 16px 11px 13px; border-radius: 12px;
-            background: var(--ink); color: #fff; font-size: 14.5px; font-weight: 500; box-shadow: 0 12px 30px -10px rgba(3,16,10,.5);
-            animation: tIn .3s var(--ease);
-        }
-        .toast i { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
-        .toast.ok i { background: #34D399; } .toast.bad i { background: #FF7A6B; }
-        .toast.out { opacity: 0; transform: translateY(8px); transition: .25s; }
-        @keyframes tIn { from { opacity: 0; transform: translateY(10px); } }
-        body.has-sel .toasts { bottom: 96px; }
-
-        /* ---------- มือถือ ---------- */
-        @media (max-width: 860px) {
-            .gate { grid-template-columns: 1fr; margin: -20px 0 -120px calc(50% - 50vw); }
-            .gate-art { padding: 32px 24px 38px; min-height: 0; gap: 34px; }
-            .gate-art .dot { width: 180px; height: 180px; right: -60px; top: -60px; }
-            .gate-art p { font-size: 15.5px; }
-            .table { grid-template-columns: 1fr; padding: 30px 24px; min-height: 0; }
-            .frame { display: none; }
-            .row { grid-template-columns: 52px minmax(0, 1fr); gap: 4px 14px; padding: 14px 16px; }
-            .row .thumb { width: 52px; height: 52px; grid-row: span 2; }
-            .row .r-right { grid-column: 2; }
-        }
         @media (max-width: 640px) {
-            .top { gap: 8px; padding: 0 12px; height: 58px; }
-            .brand span { display: none; }
-            .brand b { font-size: 15px; }
-            .nav { margin-left: 4px; }
-            .nav button { padding: 7px 10px; font-size: 14px; }
-            .nav .lbl-long { display: none; }
-            main { padding: 20px 14px 120px; }
-            .page-head h1 { font-size: 24px; }
-            .table h2 { font-size: 25px; }
-            .table .acts .btn { flex: 1; }
-            .paste-tip { display: none; }
-            .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 10px; }
-            .pick { opacity: 1; }
-            .lb-stage { padding: 56px 10px 8px; }
-            .lb-nav { display: none; }
-            .tray-head { padding: 14px 16px; }
-            .tray-head > div:first-child { width: 100%; }
-            .tray-head .sp { display: none; }
-            .tray-head .btn { flex: 1; }
+            body { padding: 80px 10px 30px; }
+            .card { padding: 16px; border-radius: 14px; }
+            .drop { padding: 30px 14px; }
+            .brand small { display: none; }
+            .item { grid-template-columns: 56px 1fr; gap: 10px; }
+            .item img { width: 56px; height: 56px; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .hide-sm { display: none; }
         }
-        @media (max-width: 1000px) { .brand span { display: none; } }
-        @media (max-width: 560px) { .brand > div { display: none; } }
-        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
     </style>
 </head>
 <body>
-    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <svg width="0" height="0" style="position:absolute">
         <defs>
             <symbol id="logo" viewBox="0 0 120 120">
                 <defs>
-                    <linearGradient id="lbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#062418"/><stop offset=".55" stop-color="#0E4A2E"/><stop offset="1" stop-color="#1F7A45"/></linearGradient>
-                    <linearGradient id="lflesh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF7A8A"/><stop offset="1" stop-color="#E0314A"/></linearGradient>
+                    <linearGradient id="lbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#071633"/><stop offset=".55" stop-color="#0A3A8C"/><stop offset="1" stop-color="#0E5FD8"/></linearGradient>
+                    <linearGradient id="lfg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C9DCFF"/></linearGradient>
+                    <radialGradient id="lpel" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#FFC27A"/><stop offset="1" stop-color="#E9730C"/></radialGradient>
                 </defs>
                 <rect width="120" height="120" rx="28" fill="url(#lbg)"/>
                 <path d="M0 92 L92 0 H120 V12 L12 120 H0Z" fill="#fff" opacity=".05"/>
-                <path d="M18 50 A42 42 0 0 0 102 50 Z" fill="#8FE0A8"/>
-                <path d="M23 50 A37 37 0 0 0 97 50 Z" fill="#F4FFF6"/>
-                <path d="M27 50 A33 33 0 0 0 93 50 Z" fill="url(#lflesh)"/>
-                <g fill="#2A0F14"><ellipse cx="46" cy="62" rx="2.6" ry="4" transform="rotate(-20 46 62)"/><ellipse cx="60" cy="70" rx="2.6" ry="4"/><ellipse cx="74" cy="62" rx="2.6" ry="4" transform="rotate(20 74 62)"/><ellipse cx="53" cy="57" rx="2.2" ry="3.4"/><ellipse cx="67" cy="57" rx="2.2" ry="3.4"/></g>
-                <rect x="18" y="47" width="84" height="5" rx="2.5" fill="#F4FFF6" opacity=".9"/>
+                <path d="M34 26 H92 L84 43 H55 V53 H78 L70 69 H55 V94 H34 Z" fill="url(#lfg)"/>
+                <circle cx="87" cy="61" r="8" fill="url(#lpel)"/>
             </symbol>
-            <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
-            <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
-            <symbol id="i-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
-            <symbol id="i-img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></symbol>
-            <symbol id="i-cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
-            <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
-            <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></symbol>
-            <symbol id="i-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></symbol>
-            <symbol id="i-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></symbol>
-            <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
-            <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
-            <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
-            <symbol id="i-drive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
-            <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
-            <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
-            <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8M4 4v4h4M4 13a8 8 0 0 0 14.3 4.9L20 16M20 20v-4h-4"/></symbol>
         </defs>
     </svg>
 
-    <header class="top">
-        <a class="brand" href="#" aria-label="คลังรูป สยาม ฮาร์เวสต์ พรีเมี่ยม">
-            <svg aria-hidden="true"><use href="#logo"/></svg>
-            <div><b>คลังรูป สยาม ฮาร์เวสต์ พรีเมี่ยม</b> <span>Siam Harvest Premium</span></div>
-        </a>
-        <nav class="nav" id="nav" role="tablist" hidden>
-            <button role="tab" aria-selected="true" data-tab="upload">อัปโหลด</button>
-            <button role="tab" aria-selected="false" data-tab="library"><span>คลังรูป</span><span class="count" id="lib-count" hidden></span></button>
-        </nav>
+    <header class="topbar">
+        <div class="brand">
+            <svg><use href="#logo"/></svg>
+            <div><b>Farco Image Drive</b><small>Farco International Co., Ltd. · ฝากรูปสินค้า</small></div>
+        </div>
         <div class="top-actions">
-            <button class="ibtn" id="btn-folder" title="เปิดโฟลเดอร์ใน Google Drive" aria-label="เปิดโฟลเดอร์ใน Google Drive" hidden><svg><use href="#i-drive"/></svg></button>
-            <button class="ibtn" id="btn-theme" title="สลับโหมดสว่าง/มืด" aria-label="สลับโหมดสว่าง/มืด"><svg><use href="#i-moon"/></svg></button>
-            <button class="ibtn" id="btn-lock" title="ออกจากระบบ" aria-label="ออกจากระบบ" hidden><svg><use href="#i-lock"/></svg></button>
+            <button class="icon-btn" id="btn-folder" title="เปิดโฟลเดอร์ใน Google Drive" style="display:none">📁 <span class="hide-sm">Drive</span></button>
+            <button class="icon-btn" id="btn-theme" title="สลับธีม">🌓</button>
+            <button class="icon-btn" id="btn-lock" title="ออกจากระบบ" style="display:none">🔒</button>
         </div>
     </header>
 
-    <main>
-        <!-- ประตูเข้า -->
-        <section class="gate" id="gate" hidden>
-            <div class="gate-art">
-                <svg class="mark" aria-hidden="true"><use href="#logo"/></svg>
-                <div>
-                    <h1>ฝากรูปสินค้า ได้ลิงก์ทันที</h1>
-                    <p>รูปทุกใบเก็บใน Google Drive ของบริษัท ย่อขนาดให้อัตโนมัติ แล้วคัดลอกลิงก์ไปวางในระบบคลังได้เลย</p>
-                </div>
-                <div class="dot" aria-hidden="true"></div>
+    <main class="wrap">
+        <!-- Gate -->
+        <section id="gate" class="card gate" style="display:none">
+            <svg><use href="#logo"/></svg>
+            <h1>Farco Image Drive</h1>
+            <div class="muted">ฝากรูปลง Google Drive ของบริษัท แล้วได้ลิงก์ไปใช้ในระบบคลังทันที</div>
+            <input type="password" id="key" placeholder="รหัสอัปโหลด" autocomplete="current-password">
+            <button class="btn btn-primary" id="btn-enter">เข้าใช้งาน</button>
+            <div id="gate-msg" class="err" style="margin-top:12px; min-height:18px"></div>
+        </section>
+
+        <!-- App -->
+        <section id="app" style="display:none">
+            <div class="tabs">
+                <button class="tab active" data-tab="upload">⬆️ อัปโหลด</button>
+                <button class="tab" data-tab="gallery">🖼️ รูปทั้งหมด</button>
             </div>
-            <div class="gate-form">
-                <form id="gate-form" autocomplete="on">
-                    <h2>เข้าใช้งาน</h2>
-                    <p class="lead">ใส่รหัสอัปโหลดที่ได้รับจากผู้ดูแลระบบ</p>
-                    <div class="field">
-                        <label for="key">รหัสอัปโหลด</label>
-                        <div class="field-wrap">
-                            <input type="password" id="key" autocomplete="current-password" required>
-                            <button type="button" class="peek" id="peek" aria-label="แสดงรหัส"><svg><use href="#i-eye"/></svg></button>
+
+            <div class="pane active" id="pane-upload">
+                <div class="card">
+                    <div class="drop" id="drop" tabindex="0">
+                        <div class="big">⬆</div>
+                        <h3>ลากรูปมาวาง หรือ กดเพื่อเลือกรูป</h3>
+                        <div class="muted keys">หรือคัดลอกรูปแล้วกด <kbd>Ctrl</kbd>+<kbd>V</kbd> ที่หน้านี้ได้เลย · ทีละหลายรูปก็ได้</div>
+                        <div class="drop-btns">
+                            <button class="btn btn-primary" id="btn-pick" type="button">🖼️ เลือกรูป</button>
+                            <button class="btn btn-outline" id="btn-cam" type="button">📷 ถ่ายรูป</button>
                         </div>
                     </div>
-                    <button class="btn btn-blue" id="btn-enter" type="submit">เข้าใช้งาน</button>
-                    <div class="gate-msg" id="gate-msg" role="alert"></div>
-                </form>
-            </div>
-        </section>
-
-        <!-- อัปโหลด -->
-        <section id="pane-upload" hidden>
-            <div class="table" id="drop" tabindex="0" role="button" aria-label="เลือกรูปเพื่ออัปโหลด">
-                <div>
-                    <h2>วางรูปสินค้าลงบนโต๊ะนี้</h2>
-                    <p>ลากไฟล์มาวาง เลือกจากเครื่อง หรือถ่ายรูปใหม่ ทีละหลายรูปก็ได้<span class="paste-tip"> คัดลอกรูปจากที่อื่นแล้วกด <kbd>Ctrl</kbd> <kbd>V</kbd> ก็ได้เหมือนกัน</span></p>
-                    <div class="acts">
-                        <button class="btn btn-orange" id="btn-pick" type="button"><svg><use href="#i-img"/></svg>เลือกรูป</button>
-                        <button class="btn btn-ghost-light" id="btn-cam" type="button"><svg><use href="#i-cam"/></svg>ถ่ายรูป</button>
+                    <input type="file" id="file" accept="image/*" multiple hidden>
+                    <input type="file" id="cam" accept="image/*" capture="environment" hidden>
+                    <div class="opts">
+                        <label><input type="checkbox" id="opt-resize" checked> ย่อรูปอัตโนมัติ (โหลดเร็ว ประหยัดพื้นที่)</label>
+                        <label>ขนาดสูงสุด
+                            <select id="opt-size"><option value="1200">1200 px</option><option value="1600" selected>1600 px</option><option value="2400">2400 px</option></select></label>
+                        <label><input type="checkbox" id="opt-copy" checked> คัดลอกลิงก์ให้อัตโนมัติ</label>
                     </div>
+
+                    <div class="list-head" id="up-head" style="display:none">
+                        <b id="up-count"></b>
+                        <div style="display:flex; gap:8px">
+                            <button class="btn btn-outline btn-sm" id="btn-copy-all">📋 คัดลอกลิงก์ทั้งหมด</button>
+                            <button class="btn btn-outline btn-sm" id="btn-clear">ล้างรายการ</button>
+                        </div>
+                    </div>
+                    <div class="items" id="items"></div>
                 </div>
-                <div class="frame" aria-hidden="true">
-                    <svg viewBox="0 0 120 120" style="opacity:.9"><use href="#logo"/></svg>
-                    <span class="pel"></span>
+                <p class="muted" style="text-align:center">นำลิงก์ไปวางในช่อง <b>"ลิงก์รูปภาพ"</b> ของหน้ารับเข้า/แก้ไขสินค้า หรือช่องโลโก้ในหน้าตั้งค่าของระบบคลัง</p>
+            </div>
+
+            <div class="pane" id="pane-gallery">
+                <div class="card">
+                    <div class="g-tools">
+                        <input id="q" placeholder="🔍 ค้นหาชื่อไฟล์…">
+                        <button class="btn btn-outline" id="btn-reload">🔄 รีเฟรช</button>
+                    </div>
+                    <div class="muted" id="g-info" style="margin-bottom:10px"></div>
+                    <div class="grid" id="grid"></div>
+                    <div style="text-align:center; margin-top:16px"><button class="btn btn-outline" id="btn-more" style="display:none">โหลดเพิ่ม</button></div>
                 </div>
             </div>
-            <input type="file" id="file" accept="image/*" multiple hidden>
-            <input type="file" id="cam" accept="image/*" capture="environment" hidden>
-
-            <div class="opts">
-                <label class="sw"><input type="checkbox" id="opt-resize" checked> ย่อรูปอัตโนมัติ</label>
-                <span class="sizes">ด้านยาวสูงสุด
-                    <span class="seg" id="opt-size" role="group" aria-label="ขนาดสูงสุด">
-                        <button type="button" data-v="1200" aria-pressed="false">1200</button>
-                        <button type="button" data-v="1600" aria-pressed="true">1600</button>
-                        <button type="button" data-v="2400" aria-pressed="false">2400</button>
-                    </span> px</span>
-                <label class="sw"><input type="checkbox" id="opt-copy" checked> คัดลอกลิงก์ให้เมื่ออัปโหลดเสร็จ</label>
-            </div>
-
-            <div class="tray" id="tray" hidden>
-                <div class="tray-head">
-                    <div><h3 id="tray-title">รอบนี้</h3><div class="sub" id="tray-sub"></div></div>
-                    <div class="sp"></div>
-                    <button class="btn btn-line btn-sm" id="btn-copy-all"><svg><use href="#i-copy"/></svg>คัดลอกลิงก์ทั้งหมด</button>
-                    <button class="btn btn-line btn-sm" id="btn-clear">ล้างรายการที่เสร็จแล้ว</button>
-                </div>
-                <div class="total-bar"><span id="total-bar"></span></div>
-                <div id="rows"></div>
-            </div>
-
-            <p class="hint">นำลิงก์ไปวางในช่อง "ลิงก์รูปภาพ" ของหน้ารับเข้าหรือแก้ไขสินค้า หรือช่องโลโก้ในหน้าตั้งค่าของระบบคลัง</p>
-        </section>
-
-        <!-- คลังรูป -->
-        <section id="pane-library" hidden>
-            <div class="page-head">
-                <div><h1>คลังรูป</h1><p id="lib-info">รูปทั้งหมดในโฟลเดอร์ของบริษัท</p></div>
-            </div>
-            <div class="lib-tools">
-                <label class="search"><svg><use href="#i-search"/></svg><span class="sr">ค้นหาชื่อไฟล์</span>
-                    <input id="q" type="search" placeholder="ค้นหาชื่อไฟล์" autocomplete="off"><kbd>/</kbd></label>
-                <button class="btn btn-line" id="btn-reload"><svg><use href="#i-refresh"/></svg>รีเฟรช</button>
-            </div>
-            <div class="grid" id="grid"></div>
-            <div class="more"><button class="btn btn-line" id="btn-more" hidden>โหลดเพิ่ม</button></div>
         </section>
     </main>
 
-    <!-- แถบเลือกหลายรูป -->
-    <div class="selbar" id="selbar" role="region" aria-label="รูปที่เลือก">
-        <b id="sel-n"></b>
-        <button class="btn btn-orange btn-sm" id="sel-copy"><svg><use href="#i-copy"/></svg>คัดลอกลิงก์</button>
-        <button class="btn btn-danger-l btn-sm" id="sel-del"><svg><use href="#i-trash"/></svg>ลบ</button>
-        <button class="btn btn-ghost-light btn-sm" id="sel-clear">ยกเลิก</button>
-    </div>
-
-    <div class="veil" id="veil" aria-hidden="true"><div>ปล่อยเพื่ออัปโหลด</div></div>
-
-    <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="ดูรูป">
-        <button class="ibtn lb-close" id="lb-close" aria-label="ปิด"><svg><use href="#i-x"/></svg></button>
-        <div class="lb-stage">
-            <button class="lb-nav prev" id="lb-prev" aria-label="รูปก่อนหน้า"><svg><use href="#i-left"/></svg></button>
-            <img id="lb-img" alt="">
-            <button class="lb-nav next" id="lb-next" aria-label="รูปถัดไป"><svg><use href="#i-right"/></svg></button>
-        </div>
-        <div class="lb-bar">
-            <div class="t"><b id="lb-name"></b><span id="lb-meta"></span></div>
-            <button class="btn btn-orange btn-sm" id="lb-copy"><svg><use href="#i-copy"/></svg>คัดลอกลิงก์</button>
-            <a class="btn btn-ghost-light btn-sm" id="lb-open" target="_blank" rel="noopener"><svg><use href="#i-ext"/></svg>เปิดใน Drive</a>
-            <button class="btn btn-danger-l btn-sm" id="lb-del"><svg><use href="#i-trash"/></svg>ลบ</button>
-        </div>
-    </div>
-
-    <div class="dlg" id="dlg" role="alertdialog" aria-modal="true" aria-labelledby="dlg-t">
-        <div class="dlg-box">
-            <h3 id="dlg-t"></h3>
-            <p id="dlg-p"></p>
-            <div class="dlg-acts"><button class="btn btn-line btn-sm" id="dlg-no">ยกเลิก</button><button class="btn btn-danger btn-sm" id="dlg-yes"></button></div>
-        </div>
-    </div>
-
-    <div class="toasts" id="toasts" aria-live="polite"></div>
+    <div id="toast"></div>
+    <div class="viewer" id="viewer"><img alt=""></div>
 
     <script>
     'use strict';
-    // ⚠️ ลิงก์ /exec ของ Apps Script ฝากรูป (ฝั่งเซิร์ฟเวอร์ใช้ตัวเดิมได้เลย ไม่ต้องแก้)
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBh1vO8rLJbsLAREreYrn3VFrYIQ7cMJ8_DMLjdLLjnQhgD_-lGUEBQjcdwtTVnS5Q/exec';
+    // ⚠️ ใส่ลิงก์ /exec ของ Apps Script "Farco Image Drive"
+    const SCRIPT_URL = 'PASTE_IMAGE_DRIVE_WEB_APP_URL_HERE';
     const MAX_PARALLEL = 3;
-    const PAGE = 60;
 
     const $ = id => document.getElementById(id);
-    const LS = { key: 'shp_img_key', theme: 'shp_img_theme', opts: 'shp_img_opts', tab: 'shp_img_tab' };
+    const LS = { key: 'farco_img_key', theme: 'farco_img_theme', opts: 'farco_img_opts' };
     const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
     const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
     const lsDel = k => { try { localStorage.removeItem(k); } catch (e) {} };
     const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const fmtSize = b => b >= 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
-    const icon = (n, cls = '') => `<svg class="${cls}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
-    const cleanName = n => String(n || '').replace(/^\d{8}-\d{6}_/, '');
-    const fmtDate = d => { try { return new Date(d).toLocaleString('th-TH', { day: 'numeric', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } };
-    const driveView = f => f.view || (f.id ? `https://drive.google.com/file/d/${encodeURIComponent(f.id)}/view` : f.url);
 
     let key = lsGet(LS.key) || '';
-    let tab = 'upload';
     let uploaded = [], queue = [], running = 0, seq = 0;
-    let gOffset = 0, gTotal = 0, gFiles = [], gStale = true, gLoading = false;
-    const selected = new Set();
-    const opts = { resize: true, size: 1600, copy: true };
+    let gOffset = 0, gTotal = 0, gFiles = [];
 
-    /* ================= ธีม ================= */
-    const isDark = () => document.documentElement.dataset.theme === 'dark' ||
-        (!document.documentElement.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
-    function paintThemeIcon() { $('btn-theme').innerHTML = icon(isDark() ? 'sun' : 'moon'); }
-    const savedTheme = lsGet(LS.theme);
-    if (savedTheme) document.documentElement.dataset.theme = savedTheme;
-    paintThemeIcon();
+    /* ---------- theme ---------- */
+    const theme = lsGet(LS.theme);
+    if (theme) document.documentElement.dataset.theme = theme;
     $('btn-theme').onclick = () => {
-        const next = isDark() ? 'light' : 'dark';
-        document.documentElement.dataset.theme = next; lsSet(LS.theme, next); paintThemeIcon();
+        const dark = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim().toUpperCase() === '#0A111E';
+        const next = dark ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next; lsSet(LS.theme, next);
     };
 
-    /* ================= แจ้งเตือน ================= */
-    function toast(msg, kind = '') {
-        const t = document.createElement('div');
-        t.className = 'toast ' + kind; t.innerHTML = `<i></i><span>${esc(msg)}</span>`;
-        const box = $('toasts'); box.appendChild(t);
-        while (box.children.length > 3) box.firstChild.remove();
-        setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 260); }, 2600);
-    }
+    /* ---------- toast ---------- */
+    let tT;
+    function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2200); }
 
-    /* ================= กล่องยืนยัน ================= */
-    function ask(title, body, yes) {
-        return new Promise(res => {
-            $('dlg-t').textContent = title; $('dlg-p').textContent = body; $('dlg-yes').textContent = yes;
-            const d = $('dlg'); d.classList.add('on');
-            const done = v => { d.classList.remove('on'); document.removeEventListener('keydown', onKey, true); res(v); };
-            const onKey = e => { if (e.key === 'Escape') { e.stopPropagation(); done(false); } };
-            document.addEventListener('keydown', onKey, true);
-            $('dlg-yes').onclick = () => done(true); $('dlg-no').onclick = () => done(false);
-            d.onclick = e => { if (e.target === d) done(false); };
-            setTimeout(() => $('dlg-no').focus(), 30);
-        });
-    }
-
-    /* ================= API ================= */
-    // ห้ามใส่ upload progress listener / header แปลกๆ — จะเกิด preflight ซึ่ง Apps Script ไม่รองรับ
+    /* ---------- api ---------- */
+    // หมายเหตุ: ห้ามใส่ upload progress listener — จะทำให้เบราว์เซอร์ส่ง preflight ซึ่ง Apps Script ไม่รองรับ
     async function api(action, params = {}, onProgress) {
         if (/^PASTE_/.test(SCRIPT_URL)) throw new Error('ยังไม่ได้ใส่ SCRIPT_URL ในไฟล์ index.html');
         const body = JSON.stringify({ action, key, ...params });
@@ -624,115 +275,97 @@
         try {
             const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body });
             let r;
-            try { r = await res.json(); } catch (e) { throw new Error('เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง ตรวจว่า Deploy ให้ Anyone เข้าถึงได้'); }
-            if (r.status === 'auth' || r.status === 'locked') { lock(r.message); throw new Error(r.message || 'กรุณาเข้าใช้งานใหม่'); }
+            try { r = await res.json(); } catch (e) { throw new Error('เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง (ตรวจว่า Deploy เป็น Anyone แล้ว)'); }
+            if (r.status === 'auth' || r.status === 'locked') { lock(r.message); throw new Error(r.message); }
             if (onProgress) onProgress(1);
             return r;
         } catch (e) {
-            throw e instanceof TypeError ? new Error('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ ตรวจอินเทอร์เน็ตแล้วลองใหม่') : e;
+            throw e instanceof TypeError ? new Error('เชื่อมต่อไม่ได้ ตรวจอินเทอร์เน็ต') : e;
         } finally { if (timer) clearInterval(timer); }
     }
 
-    /* ================= เข้า/ออก ================= */
-    const appOn = () => !$('nav').hidden;
+    /* ---------- gate ---------- */
     function showApp(folderUrl) {
-        $('gate').hidden = true; $('nav').hidden = false; $('btn-lock').hidden = false;
-        if (folderUrl) { $('btn-folder').hidden = false; $('btn-folder').onclick = () => window.open(folderUrl, '_blank', 'noopener'); }
-        showTab(lsGet(LS.tab) === 'library' ? 'library' : 'upload');
+        $('gate').style.display = 'none'; $('app').style.display = 'block';
+        $('btn-lock').style.display = '';
+        if (folderUrl) { $('btn-folder').style.display = ''; $('btn-folder').onclick = () => window.open(folderUrl, '_blank', 'noopener'); }
     }
     function lock(msg) {
         key = ''; lsDel(LS.key);
-        $('gate').hidden = false; $('nav').hidden = true; $('btn-lock').hidden = true; $('btn-folder').hidden = true;
-        $('pane-upload').hidden = true; $('pane-library').hidden = true;
-        clearSel();
-        const m = $('gate-msg'); m.textContent = msg || '';
-        setTimeout(() => $('key').focus(), 60);
+        $('app').style.display = 'none'; $('gate').style.display = 'block';
+        $('btn-lock').style.display = 'none'; $('btn-folder').style.display = 'none';
+        $('gate-msg').textContent = msg || '';
+        setTimeout(() => $('key').focus(), 50);
     }
-    $('gate-form').onsubmit = async e => {
-        e.preventDefault();
-        const k = $('key').value.trim(); if (!k) return;
-        const b = $('btn-enter'), m = $('gate-msg');
-        b.disabled = true; b.textContent = 'กำลังตรวจสอบรหัส…'; m.textContent = ''; m.classList.remove('shake');
+    async function enter() {
+        const k = $('key').value.trim();
+        if (!k) return;
+        const b = $('btn-enter'); b.disabled = true; b.textContent = 'กำลังตรวจสอบ…'; $('gate-msg').textContent = '';
         key = k;
         try {
             const r = await api('ping');
             if (r.status === 'success') { lsSet(LS.key, k); $('key').value = ''; showApp(r.folderUrl); }
-            else { m.textContent = r.message || 'รหัสอัปโหลดไม่ถูกต้อง'; void m.offsetWidth; m.classList.add('shake'); }
-        } catch (err) { m.textContent = err.message; void m.offsetWidth; m.classList.add('shake'); }
+            else $('gate-msg').textContent = r.message || 'เข้าใช้งานไม่ได้';
+        } catch (e) { $('gate-msg').textContent = e.message; }
         finally { b.disabled = false; b.textContent = 'เข้าใช้งาน'; }
-    };
-    $('peek').onclick = () => { const i = $('key'); i.type = i.type === 'password' ? 'text' : 'password'; i.focus(); };
-    $('btn-lock').onclick = async () => { if (await ask('ออกจากระบบฝากรูป?', 'ครั้งหน้าต้องใส่รหัสอัปโหลดใหม่', 'ออกจากระบบ')) lock(''); };
-
-    /* ================= แท็บ ================= */
-    function showTab(t) {
-        tab = t; lsSet(LS.tab, t);
-        document.querySelectorAll('#nav button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === t)));
-        $('pane-upload').hidden = t !== 'upload';
-        $('pane-library').hidden = t !== 'library';
-        if (t !== 'library') clearSel();
-        if (t === 'library' && gStale) loadGallery(true);
     }
-    document.querySelectorAll('#nav button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+    $('btn-enter').onclick = enter;
+    $('key').addEventListener('keydown', e => { if (e.key === 'Enter') enter(); });
+    $('btn-lock').onclick = () => { if (confirm('ออกจากระบบฝากรูป?')) lock(''); };
 
-    /* ================= ตัวเลือก ================= */
-    try { Object.assign(opts, JSON.parse(lsGet(LS.opts) || '{}')); } catch (e) {}
-    function paintOpts() {
-        $('opt-resize').checked = !!opts.resize; $('opt-copy').checked = !!opts.copy;
-        $('opt-size').classList.toggle('off', !opts.resize);
-        document.querySelectorAll('#opt-size button').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.v) === Number(opts.size))));
-    }
-    const saveOpts = () => { lsSet(LS.opts, JSON.stringify(opts)); paintOpts(); };
-    $('opt-resize').onchange = e => { opts.resize = e.target.checked; saveOpts(); };
-    $('opt-copy').onchange = e => { opts.copy = e.target.checked; saveOpts(); };
-    document.querySelectorAll('#opt-size button').forEach(b => b.onclick = () => { opts.size = Number(b.dataset.v); saveOpts(); });
-    paintOpts();
+    /* ---------- tabs ---------- */
+    document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+        document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
+        document.querySelectorAll('.pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + t.dataset.tab));
+        if (t.dataset.tab === 'gallery' && !gFiles.length) loadGallery(true);
+    });
 
-    /* ================= รับไฟล์: เลือก / ลาก / วาง ================= */
+    /* ---------- options ---------- */
+    try { const o = JSON.parse(lsGet(LS.opts) || '{}');
+        if ('resize' in o) $('opt-resize').checked = o.resize; if (o.size) $('opt-size').value = o.size; if ('copy' in o) $('opt-copy').checked = o.copy; } catch (e) {}
+    ['opt-resize', 'opt-size', 'opt-copy'].forEach(id => $(id).addEventListener('change', () =>
+        lsSet(LS.opts, JSON.stringify({ resize: $('opt-resize').checked, size: $('opt-size').value, copy: $('opt-copy').checked }))));
+
+    /* ---------- input: pick / drop / paste ---------- */
     const drop = $('drop');
     $('btn-pick').onclick = e => { e.stopPropagation(); $('file').click(); };
     $('btn-cam').onclick = e => { e.stopPropagation(); $('cam').click(); };
     drop.onclick = () => $('file').click();
     drop.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('file').click(); } };
     ['file', 'cam'].forEach(id => $(id).onchange = e => { addFiles(e.target.files); e.target.value = ''; });
-
-    let dragDepth = 0;
-    const hasFiles = e => e.dataTransfer && [...(e.dataTransfer.types || [])].includes('Files');
-    document.addEventListener('dragenter', e => { if (!hasFiles(e) || !appOn()) return; e.preventDefault(); dragDepth++; $('veil').classList.add('on'); drop.classList.add('over'); });
-    document.addEventListener('dragover', e => { if (hasFiles(e)) e.preventDefault(); });
-    document.addEventListener('dragleave', e => { if (!hasFiles(e)) return; dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) { $('veil').classList.remove('on'); drop.classList.remove('over'); } });
-    document.addEventListener('drop', e => {
-        if (!hasFiles(e)) return; e.preventDefault(); dragDepth = 0; $('veil').classList.remove('on'); drop.classList.remove('over');
-        if (e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
-    });
+    ['dragenter', 'dragover'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+    ['dragleave', 'drop'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); if (ev === 'drop' || !e.relatedTarget) drop.classList.remove('over'); }));
+    document.addEventListener('drop', e => { if (e.dataTransfer && e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
     document.addEventListener('paste', e => {
-        if (!appOn()) return;
+        if ($('app').style.display === 'none') return;
         const files = [...(e.clipboardData ? e.clipboardData.items : [])].filter(i => i.kind === 'file' && i.type.startsWith('image/')).map(i => i.getAsFile()).filter(Boolean);
-        if (files.length) { e.preventDefault(); addFiles(files); toast(`วางรูปแล้ว ${files.length} รูป`); }
+        if (files.length) { e.preventDefault(); addFiles(files); toast(`วางรูป ${files.length} รูปแล้ว`); }
     });
 
     function addFiles(list) {
-        if (!appOn()) return;
+        if ($('app').style.display === 'none') return;
         const files = [...list].filter(f => f.type.startsWith('image/') || /\.(heic|heif)$/i.test(f.name));
-        if (!files.length) { toast('รองรับเฉพาะไฟล์รูปภาพ', 'bad'); return; }
-        if (tab !== 'upload') showTab('upload');
+        if (!files.length) { toast('รองรับเฉพาะไฟล์รูปภาพ'); return; }
+        document.querySelector('.tab[data-tab="upload"]').click();
         files.forEach(f => {
-            const ext = (f.type.split('/')[1] || 'png').replace('jpeg', 'jpg');
-            const it = { id: ++seq, file: f, name: f.name || `pasted-${Date.now()}.${ext}`, status: 'wait', progress: 0 };
-            uploaded.unshift(it); renderRow(it, true); queue.push(it);
+            const it = { id: ++seq, file: f, name: f.name || `pasted-${Date.now()}.png`, status: 'wait', progress: 0 };
+            uploaded.unshift(it);
+            renderItem(it, true);
+            queue.push(it);
         });
-        renderTray();
-        $('tray').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
+        renderHead();
         pump();
     }
+
     function pump() {
         while (running < MAX_PARALLEL && queue.length) {
-            const it = queue.shift(); running++;
+            const it = queue.shift();
+            running++;
             uploadOne(it).finally(() => { running--; pump(); if (!running && !queue.length) afterBatch(); });
         }
     }
 
-    /* ================= ย่อรูป ================= */
+    /* ---------- image processing ---------- */
     function loadImage(file) {
         return new Promise((res, rej) => {
             const url = URL.createObjectURL(file), img = new Image();
@@ -742,8 +375,8 @@
         });
     }
     async function prepare(file) {
-        const max = Number(opts.size) || 1600;
-        const skip = !opts.resize || /gif|svg/.test(file.type) || (/\.(heic|heif)$/i.test(file.name) && !file.type);
+        const max = Number($('opt-size').value) || 1600;
+        const skip = !$('opt-resize').checked || /gif|svg/.test(file.type) || /\.(heic|heif)$/i.test(file.name) && !file.type;
         let preview = '';
         try {
             const { img, url } = await loadImage(file);
@@ -770,97 +403,78 @@
 
     async function uploadOne(it) {
         try {
-            it.status = 'prep'; renderRow(it);
+            it.status = 'prep'; renderItem(it);
             const p = await prepare(it.file);
-            it.preview = p.preview; it.newSize = p.blob.size; it.dim = p.w ? `${p.w} × ${p.h}` : '';
-            it.status = 'up'; renderRow(it);
+            it.preview = p.preview; it.newSize = p.blob.size; it.dim = p.w ? `${p.w}×${p.h}` : '';
+            it.status = 'up'; renderItem(it);
             const data = await toBase64(p.blob);
-            const r = await api('upload', { name: it.name, mime: p.type, data }, f => { it.progress = f; paintProgress(it); renderTotal(); });
+            const r = await api('upload', { name: it.name, mime: p.type, data }, f => { it.progress = f; setBar(it); });
             if (r.status !== 'success') throw new Error(r.message || 'อัปโหลดไม่สำเร็จ');
-            it.result = r.file; it.status = 'done'; it.progress = 1;
-            gStale = true;
+            it.result = r.file; it.status = 'done';
+            gFiles = []; // ให้แกลเลอรีโหลดใหม่ครั้งหน้า
         } catch (e) {
             it.status = 'error'; it.error = e.message;
         }
-        renderRow(it); renderTray();
-    }
-    function afterBatch() {
-        const done = uploaded.filter(x => x.status === 'done' && !x.notified);
-        const failed = uploaded.filter(x => x.status === 'error' && !x.notifiedErr);
-        failed.forEach(x => x.notifiedErr = true);
-        if (failed.length && !done.length) { toast(`อัปโหลดไม่สำเร็จ ${failed.length} รูป กด "ลองใหม่" ที่รายการ`, 'bad'); return; }
-        if (!done.length) return;
-        done.forEach(x => x.notified = true);
-        const extra = failed.length ? ` (ไม่สำเร็จ ${failed.length} รูป)` : '';
-        if (opts.copy) copyText(done.map(x => x.result.url).join('\n')).then(ok =>
-            toast(ok ? `อัปโหลดเสร็จ ${done.length} รูป คัดลอกลิงก์แล้ว${extra}` : `อัปโหลดเสร็จ ${done.length} รูป${extra}`, failed.length ? '' : 'ok'));
-        else toast(`อัปโหลดเสร็จ ${done.length} รูป${extra}`, failed.length ? '' : 'ok');
+        renderItem(it); renderHead();
     }
 
-    /* ================= แสดงรายการอัปโหลด ================= */
-    function renderTotal() {
-        const n = uploaded.length; if (!n) return;
-        const sum = uploaded.reduce((a, x) => a + (x.status === 'done' ? 1 : x.status === 'error' ? 1 : x.progress || 0), 0);
-        $('total-bar').style.width = (sum / n * 100).toFixed(1) + '%';
+    function afterBatch() {
+        const done = uploaded.filter(x => x.status === 'done' && !x.notified);
+        if (!done.length) return;
+        done.forEach(x => x.notified = true);
+        if ($('opt-copy').checked) {
+            const text = done.map(x => x.result.url).join('\n');
+            copyText(text).then(ok => toast(ok ? `อัปโหลดเสร็จ ${done.length} รูป · คัดลอกลิงก์แล้ว ✅` : `อัปโหลดเสร็จ ${done.length} รูป ✅`));
+        } else toast(`อัปโหลดเสร็จ ${done.length} รูป ✅`);
     }
-    function renderTray() {
-        const n = uploaded.length;
-        $('tray').hidden = !n;
-        if (!n) return;
-        const ok = uploaded.filter(x => x.status === 'done');
-        const bad = uploaded.filter(x => x.status === 'error').length;
-        const busy = n - ok.length - bad;
-        $('tray-title').textContent = busy ? `กำลังอัปโหลด ${busy} รูป` : `อัปโหลดเสร็จ ${ok.length} รูป`;
-        const before = ok.reduce((a, x) => a + x.file.size, 0), after = ok.reduce((a, x) => a + (x.newSize || x.file.size), 0);
-        const parts = [`เสร็จแล้ว ${ok.length} จาก ${n} รูป`];
-        if (bad) parts.push(`ไม่สำเร็จ ${bad} รูป`);
-        if (before > after) parts.push(`ประหยัดพื้นที่ไป ${fmtSize(before - after)}`);
-        $('tray-sub').textContent = parts.join(', ');
-        $('btn-copy-all').disabled = !ok.length;
-        $('btn-clear').disabled = !(ok.length + bad);
-        renderTotal();
+
+    /* ---------- render upload list ---------- */
+    function renderHead() {
+        const n = uploaded.length, ok = uploaded.filter(x => x.status === 'done').length;
+        $('up-head').style.display = n ? '' : 'none';
+        $('up-count').textContent = `อัปโหลดแล้ว ${ok} / ${n} รูป`;
     }
-    const RING = 2 * Math.PI * 22;   // รัศมี 22 บน viewBox 60
-    function paintProgress(it) {   // อัปเดตวงแหวน + เปอร์เซ็นต์ โดยไม่วาดแถวใหม่ทั้งแถว
-        const c = document.querySelector(`#row-${it.id} .fg`);
-        if (c) c.style.strokeDashoffset = String(RING * (1 - (it.progress || 0)));
-        const s = document.querySelector(`#row-${it.id} .r-state`);
-        if (s && it.status === 'up') s.textContent = `กำลังอัปโหลด ${Math.round((it.progress || 0) * 100)}%`;
-    }
-    function renderRow(it, isNew) {
-        let el = $('row-' + it.id);
-        if (!el) { el = document.createElement('div'); el.id = 'row-' + it.id; $('rows').prepend(el); }
-        el.className = 'row' + (isNew ? ' enter' : '') + (it.status === 'done' ? ' done' : '');
-        const shrunk = it.newSize && it.newSize < it.file.size;
-        const sizeTxt = shrunk ? `${fmtSize(it.file.size)} เหลือ ${fmtSize(it.newSize)}` : fmtSize(it.file.size);
-        const pct = shrunk ? Math.round((1 - it.newSize / it.file.size) * 100) : 0;
-        let right;
+    function setBar(it) { const b = document.querySelector(`#it-${it.id} .bar span`); if (b) b.style.width = Math.round(it.progress * 100) + '%'; }
+    function renderItem(it, isNew) {
+        let el = $('it-' + it.id);
+        if (!el) { el = document.createElement('div'); el.className = 'item'; el.id = 'it-' + it.id; $('items').prepend(el); }
+        const size = it.newSize && it.newSize !== it.file.size ? `${fmtSize(it.file.size)} → ${fmtSize(it.newSize)}` : fmtSize(it.file.size);
+        let body;
         if (it.status === 'done') {
-            right = `<div class="link"><input readonly value="${esc(it.result.url)}" aria-label="ลิงก์รูป ${esc(it.name)}" onfocus="this.select()">
-                <button class="btn btn-blue btn-sm" data-copy="${esc(it.result.url)}">${icon('copy')}คัดลอก</button>
-                <a class="btn btn-line btn-sm" href="${esc(it.result.view || it.result.url)}" target="_blank" rel="noopener" title="เปิดใน Drive" aria-label="เปิดใน Drive">${icon('ext')}</a></div>`;
+            body = `<div class="linkrow"><input readonly value="${esc(it.result.url)}" onclick="this.select()">
+                <button class="btn btn-primary btn-sm copy" data-copy="${esc(it.result.url)}">📋 คัดลอก</button>
+                <a class="btn btn-outline btn-sm" href="${esc(it.result.view)}" target="_blank" rel="noopener" title="เปิดใน Drive">↗</a></div>`;
         } else if (it.status === 'error') {
-            right = `<div class="link" style="align-items:center"><span class="r-state bad" style="flex:1">${esc(it.error)}</span>
-                <button class="btn btn-line btn-sm" data-retry="${it.id}">${icon('refresh')}ลองใหม่</button></div>`;
+            body = `<span class="err">⚠️ ${esc(it.error)}</span><button class="btn btn-outline btn-sm retry" data-retry="${it.id}">ลองใหม่</button>`;
         } else {
-            right = `<div class="r-state">${it.status === 'prep' ? 'กำลังย่อรูป…' : it.status === 'up' ? `กำลังอัปโหลด ${Math.round((it.progress || 0) * 100)}%` : 'รอคิว…'}</div>`;
+            body = `<div class="bar"><span style="width:${Math.round(it.progress * 100)}%"></span></div>
+                <div class="meta" style="margin:6px 0 0">${it.status === 'prep' ? 'กำลังย่อรูป…' : it.status === 'up' ? 'กำลังอัปโหลด…' : 'รอคิว…'}</div>`;
         }
-        const ring = it.status === 'done' || it.status === 'error' ? '' :
-            `<svg class="ring" viewBox="0 0 60 60" aria-hidden="true"><circle class="bg" cx="30" cy="30" r="22"/><circle class="fg" cx="30" cy="30" r="22" style="stroke-dasharray:${RING};stroke-dashoffset:${RING * (1 - (it.progress || 0))}"/></svg>`;
-        el.innerHTML = `<div class="thumb">${it.preview ? `<img src="${esc(it.preview)}" alt="">` : ''}${ring}<span class="tick">${icon('check')}</span></div>
-            <div style="min-width:0"><div class="r-name" title="${esc(it.name)}">${esc(it.name)}</div>
-                <div class="r-meta"><span>${sizeTxt}</span>${pct >= 5 ? `<span class="save">เล็กลง ${pct}%</span>` : ''}${it.dim ? `<span>${it.dim} px</span>` : ''}</div></div>
-            <div class="r-right" style="min-width:0">${right}</div>`;
+        el.innerHTML = `<img src="${esc(it.preview || '')}" alt="" onerror="this.style.visibility='hidden'">
+            <div style="min-width:0"><div class="nm">${it.status === 'done' ? '✅ ' : ''}${esc(it.name)}</div>
+            <div class="meta">${size}${it.dim ? ' · ' + it.dim : ''}</div>${body}</div>`;
     }
+
+    document.addEventListener('click', e => {
+        const c = e.target.closest('[data-copy]');
+        if (c) { copyText(c.dataset.copy).then(ok => { if (ok) { c.classList.add('done'); c.textContent = '✓ คัดลอกแล้ว'; setTimeout(() => { c.classList.remove('done', 'copied'); c.textContent = c.classList.contains('g-copy') ? '📋 คัดลอกลิงก์' : '📋 คัดลอก'; }, 1600); toast('คัดลอกลิงก์แล้ว — นำไปวางในเว็บคลังได้เลย'); } }); return; }
+        const r = e.target.closest('[data-retry]');
+        if (r) { const it = uploaded.find(x => x.id === Number(r.dataset.retry)); if (it) { it.status = 'wait'; it.progress = 0; renderItem(it); queue.push(it); pump(); } return; }
+        const d = e.target.closest('[data-del]');
+        if (d) { delFile(d.dataset.del); return; }
+        const v = e.target.closest('[data-view]');
+        if (v) { $('viewer').querySelector('img').src = v.dataset.view; $('viewer').style.display = 'flex'; }
+    });
+    $('viewer').onclick = () => { $('viewer').style.display = 'none'; $('viewer').querySelector('img').src = ''; };
 
     $('btn-copy-all').onclick = () => {
         const links = uploaded.filter(x => x.status === 'done').map(x => x.result.url);
-        if (!links.length) return;
-        copyText(links.join('\n')).then(ok => toast(ok ? `คัดลอกลิงก์แล้ว ${links.length} ลิงก์` : 'คัดลอกไม่ได้ ลองกดค้างที่ช่องลิงก์แทน', ok ? 'ok' : 'bad'));
+        if (!links.length) { toast('ยังไม่มีรูปที่อัปโหลดเสร็จ'); return; }
+        copyText(links.join('\n')).then(ok => toast(ok ? `คัดลอก ${links.length} ลิงก์แล้ว` : 'คัดลอกไม่สำเร็จ'));
     };
     $('btn-clear').onclick = () => {
         uploaded = uploaded.filter(x => x.status === 'up' || x.status === 'prep' || x.status === 'wait');
-        $('rows').innerHTML = ''; uploaded.slice().reverse().forEach(x => renderRow(x)); renderTray();
+        $('items').innerHTML = ''; uploaded.slice().reverse().forEach(x => renderItem(x)); renderHead();
     };
 
     async function copyText(t) {
@@ -872,158 +486,47 @@
             ta.remove(); return ok;
         }
     }
-    function flashCopied(btn) {
-        if (btn.classList.contains('t-copy')) {
-            btn.classList.add('ok'); btn.innerHTML = icon('check');
-            setTimeout(() => { btn.classList.remove('ok'); btn.innerHTML = icon('copy'); }, 1500);
-        } else {
-            const html = btn.innerHTML; btn.classList.add('ok'); btn.innerHTML = icon('check') + 'คัดลอกแล้ว';
-            setTimeout(() => { btn.classList.remove('ok'); btn.innerHTML = html; }, 1500);
-        }
-    }
 
-    /* ================= คลิก (รวมทุกปุ่มในรายการ) ================= */
-    document.addEventListener('click', e => {
-        const c = e.target.closest('[data-copy]');
-        if (c) { copyText(c.dataset.copy).then(ok => { if (ok) { flashCopied(c); toast('คัดลอกลิงก์แล้ว วางในระบบคลังได้เลย', 'ok'); } else toast('คัดลอกไม่ได้', 'bad'); }); return; }
-        const r = e.target.closest('[data-retry]');
-        if (r) { const it = uploaded.find(x => x.id === Number(r.dataset.retry)); if (it) { it.status = 'wait'; it.progress = 0; it.notifiedErr = false; renderRow(it); renderTray(); queue.push(it); pump(); } return; }
-        const p = e.target.closest('[data-pick]');
-        if (p) { toggleSel(p.dataset.pick); return; }
-        const v = e.target.closest('[data-view]');
-        if (v) { if (selected.size) toggleSel(v.dataset.view); else openLb(v.dataset.view); }
-    });
-
-    /* ================= คลังรูป ================= */
+    /* ---------- gallery ---------- */
     let qTimer;
-    $('q').addEventListener('input', () => { clearTimeout(qTimer); qTimer = setTimeout(() => loadGallery(true), 350); });
+    $('q').addEventListener('input', () => { clearTimeout(qTimer); qTimer = setTimeout(() => loadGallery(true), 400); });
     $('btn-reload').onclick = () => loadGallery(true);
     $('btn-more').onclick = () => loadGallery(false);
 
-    function skeleton(n) { return Array.from({ length: n }, () => '<div class="tile skel" aria-hidden="true"><div class="ph"></div><div class="bar1"></div><div class="bar2"></div></div>').join(''); }
     async function loadGallery(reset) {
-        if (gLoading && !reset) return;
-        gLoading = true;
-        const q = $('q').value.trim();
-        if (reset) { gOffset = 0; gFiles = []; clearSel(); $('grid').innerHTML = skeleton(10); $('btn-more').hidden = true; }
-        else { $('btn-more').disabled = true; $('btn-more').textContent = 'กำลังโหลด…'; }
+        if (reset) { gOffset = 0; gFiles = []; $('grid').innerHTML = '<div class="empty" style="grid-column:1/-1">กำลังโหลด…</div>'; }
+        $('btn-more').disabled = true;
         try {
-            const r = await api('list', { offset: gOffset, limit: PAGE, q });
-            if (r.status !== 'success') throw new Error(r.message || 'โหลดรายการรูปไม่สำเร็จ');
-            if (q !== $('q').value.trim()) return;   // ผู้ใช้พิมพ์ต่อระหว่างโหลด
-            gTotal = r.total || 0; gFiles = gFiles.concat(r.files || []); gOffset = gFiles.length; gStale = false;
-            renderGallery(!reset);
+            const r = await api('list', { offset: gOffset, limit: 60, q: $('q').value.trim() });
+            if (r.status !== 'success') throw new Error(r.message);
+            gTotal = r.total; gFiles = gFiles.concat(r.files); gOffset = gFiles.length;
+            renderGallery();
         } catch (e) {
-            $('grid').innerHTML = `<div class="empty"><b>โหลดคลังรูปไม่ได้</b>${esc(e.message)}<br><button class="btn btn-line" onclick="loadGallery(true)">${icon('refresh')}ลองใหม่</button></div>`;
-        } finally { gLoading = false; $('btn-more').disabled = false; $('btn-more').textContent = 'โหลดเพิ่ม'; }
-    }
-    function tileHTML(f) {
-        return `<div class="tile${selected.has(f.id) ? ' sel' : ''}" id="t-${esc(f.id)}">
-            <button class="pick" data-pick="${esc(f.id)}" aria-label="เลือก ${esc(cleanName(f.name))}" aria-pressed="${selected.has(f.id)}">${icon('check')}</button>
-            <button class="ph" data-view="${esc(f.id)}" aria-label="ดูรูป ${esc(cleanName(f.name))}"><img loading="lazy" src="${esc(f.thumb)}" alt="" onload="this.classList.add('ld')" onerror="this.classList.add('ld')"></button>
-            <div class="t-info"><div><div class="t-name" title="${esc(f.name)}">${esc(cleanName(f.name))}</div><div class="t-date">${fmtDate(f.created)}, ${fmtSize(f.size || 0)}</div></div>
-            <button class="t-copy" data-copy="${esc(f.url)}" title="คัดลอกลิงก์" aria-label="คัดลอกลิงก์">${icon('copy')}</button></div></div>`;
+            $('grid').innerHTML = `<div class="empty" style="grid-column:1/-1">⚠️ ${esc(e.message)}</div>`;
+        } finally { $('btn-more').disabled = false; }
     }
     function renderGallery() {
-        const q = $('q').value.trim();
-        $('lib-count').hidden = !gTotal || !!q; $('lib-count').textContent = gTotal.toLocaleString('th-TH');
-        $('lib-info').textContent = q ? `พบ ${gTotal.toLocaleString('th-TH')} รูปที่ชื่อมีคำว่า "${q}"`
-            : gTotal ? `${gTotal.toLocaleString('th-TH')} รูปในโฟลเดอร์ของบริษัท กดที่รูปเพื่อดูภาพใหญ่` : 'รูปทั้งหมดในโฟลเดอร์ของบริษัท';
-        $('grid').classList.toggle('selecting', selected.size > 0);
-        $('grid').innerHTML = gFiles.length ? gFiles.map(tileHTML).join('')
-            : q ? `<div class="empty"><b>ไม่พบรูปที่ชื่อมีคำว่า "${esc(q)}"</b>ลองค้นด้วยคำที่สั้นลง หรือล้างคำค้นหา<br><button class="btn btn-line" onclick="document.getElementById('q').value='';loadGallery(true)">ล้างคำค้นหา</button></div>`
-            : `<div class="empty"><b>ยังไม่มีรูปในคลัง</b>อัปโหลดรูปสินค้ารูปแรกได้ที่หน้าอัปโหลด<br><button class="btn btn-blue" onclick="showTab('upload')">ไปหน้าอัปโหลด</button></div>`;
-        $('btn-more').hidden = gFiles.length >= gTotal;
+        $('g-info').textContent = gTotal ? `ทั้งหมด ${gTotal.toLocaleString('th-TH')} รูป · กดรูปเพื่อดูภาพใหญ่` : '';
+        $('grid').innerHTML = gFiles.length ? gFiles.map(f => `
+            <div class="g" id="g-${esc(f.id)}">
+                <div class="ph" style="background-image:url('${esc(f.thumb)}')" data-view="${esc(f.url)}" title="${esc(f.name)}"></div>
+                <div class="bd"><div class="nm" title="${esc(f.name)}">${esc(f.name.replace(/^\d{8}-\d{6}_/, ''))}</div>
+                <div class="dt">${new Date(f.created).toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' })} · ${fmtSize(f.size)}</div>
+                <div class="acts"><button class="g-copy" data-copy="${esc(f.url)}">📋 คัดลอกลิงก์</button><button class="del" data-del="${esc(f.id)}" title="ลบ">🗑</button></div></div>
+            </div>`).join('') : '<div class="empty" style="grid-column:1/-1">ยังไม่มีรูป — อัปโหลดรูปแรกได้ที่แท็บ "อัปโหลด"</div>';
+        $('btn-more').style.display = gFiles.length < gTotal ? '' : 'none';
+    }
+    async function delFile(id) {
+        const f = gFiles.find(x => x.id === id);
+        if (!confirm(`ลบรูป "${f ? f.name : id}"?\nรูปจะย้ายไปถังขยะของ Google Drive — สินค้าที่ใช้ลิงก์นี้อยู่จะไม่มีรูป`)) return;
+        try {
+            const r = await api('delete', { id });
+            if (r.status !== 'success') throw new Error(r.message);
+            gFiles = gFiles.filter(x => x.id !== id); gTotal = Math.max(0, gTotal - 1); renderGallery(); toast('ลบรูปแล้ว');
+        } catch (e) { toast('ลบไม่สำเร็จ: ' + e.message); }
     }
 
-    /* ================= เลือกหลายรูป ================= */
-    function toggleSel(id) {
-        selected.has(id) ? selected.delete(id) : selected.add(id);
-        const t = $('t-' + id); if (t) { t.classList.toggle('sel', selected.has(id)); t.querySelector('.pick').setAttribute('aria-pressed', String(selected.has(id))); }
-        paintSel();
-    }
-    function clearSel() {
-        selected.clear();
-        document.querySelectorAll('.tile.sel').forEach(t => { t.classList.remove('sel'); t.querySelector('.pick').setAttribute('aria-pressed', 'false'); });
-        paintSel();
-    }
-    function paintSel() {
-        const n = selected.size;
-        $('selbar').classList.toggle('on', n > 0); document.body.classList.toggle('has-sel', n > 0);
-        $('grid').classList.toggle('selecting', n > 0);
-        $('sel-n').textContent = `เลือก ${n} รูป`;
-    }
-    $('sel-clear').onclick = clearSel;
-    $('sel-copy').onclick = () => {
-        const links = gFiles.filter(f => selected.has(f.id)).map(f => f.url);
-        copyText(links.join('\n')).then(ok => { toast(ok ? `คัดลอกลิงก์แล้ว ${links.length} ลิงก์` : 'คัดลอกไม่ได้', ok ? 'ok' : 'bad'); if (ok) clearSel(); });
-    };
-    $('sel-del').onclick = () => delFiles([...selected]);
-
-    async function delFiles(ids) {
-        if (!ids.length) return;
-        const one = ids.length === 1 ? gFiles.find(f => f.id === ids[0]) : null;
-        const ok = await ask(one ? `ลบรูป "${cleanName(one.name)}"?` : `ลบรูปที่เลือก ${ids.length} รูป?`,
-            'รูปจะย้ายไปถังขยะของ Google Drive สินค้าที่ใช้ลิงก์นี้อยู่จะไม่แสดงรูป', one ? 'ลบรูป' : `ลบ ${ids.length} รูป`);
-        if (!ok) return;
-        let done = 0, fail = 0;
-        for (const id of ids) {
-            const t = $('t-' + id); if (t) t.style.opacity = '.4';
-            try {
-                const r = await api('delete', { id });
-                if (r.status !== 'success') throw new Error(r.message);
-                gFiles = gFiles.filter(x => x.id !== id); gTotal = Math.max(0, gTotal - 1); selected.delete(id); done++;
-                if (t) t.remove();
-            } catch (e) { fail++; if (t) t.style.opacity = ''; }
-        }
-        paintSel(); renderGallery();
-        if (lbIndex >= 0) closeLb();
-        toast(fail ? `ลบแล้ว ${done} รูป ลบไม่สำเร็จ ${fail} รูป` : `ลบแล้ว ${done} รูป`, fail ? 'bad' : 'ok');
-    }
-
-    /* ================= ดูรูปใหญ่ ================= */
-    let lbIndex = -1, lastFocus = null;
-    function openLb(id) {
-        const i = gFiles.findIndex(f => f.id === id); if (i < 0) return;
-        lastFocus = document.activeElement; lbIndex = i; paintLb();
-        $('lb').classList.add('on'); document.body.style.overflow = 'hidden';
-        setTimeout(() => $('lb-close').focus(), 30);
-    }
-    function paintLb() {
-        const f = gFiles[lbIndex]; if (!f) return;
-        $('lb-img').src = f.url; $('lb-img').alt = cleanName(f.name);
-        $('lb-name').textContent = cleanName(f.name);
-        $('lb-meta').textContent = `${fmtDate(f.created)}, ${fmtSize(f.size || 0)}, รูปที่ ${lbIndex + 1} จาก ${gFiles.length}`;
-        $('lb-open').href = driveView(f);
-        $('lb-copy').dataset.copy = f.url;
-        $('lb-prev').disabled = lbIndex <= 0; $('lb-next').disabled = lbIndex >= gFiles.length - 1;
-        $('lb-prev').style.visibility = lbIndex <= 0 ? 'hidden' : ''; $('lb-next').style.visibility = lbIndex >= gFiles.length - 1 ? 'hidden' : '';
-    }
-    function closeLb() { $('lb').classList.remove('on'); $('lb-img').src = ''; lbIndex = -1; document.body.style.overflow = ''; if (lastFocus) lastFocus.focus(); }
-    const stepLb = d => { const n = lbIndex + d; if (n >= 0 && n < gFiles.length) { lbIndex = n; paintLb(); } };
-    $('lb-close').onclick = closeLb;
-    $('lb-prev').onclick = () => stepLb(-1); $('lb-next').onclick = () => stepLb(1);
-    $('lb-del').onclick = () => { const f = gFiles[lbIndex]; if (f) delFiles([f.id]); };
-    $('lb').addEventListener('click', e => { if (e.target.classList.contains('lb-stage')) closeLb(); });
-    let tx = null;   // ปัดซ้าย/ขวาบนมือถือ
-    $('lb').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-    $('lb').addEventListener('touchend', e => { if (tx == null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) stepLb(dx < 0 ? 1 : -1); tx = null; });
-
-    /* ================= คีย์ลัด ================= */
-    document.addEventListener('keydown', e => {
-        if ($('dlg').classList.contains('on')) return;
-        if (lbIndex >= 0) {
-            if (e.key === 'Escape') closeLb();
-            else if (e.key === 'ArrowLeft') stepLb(-1);
-            else if (e.key === 'ArrowRight') stepLb(1);
-            return;
-        }
-        const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
-        if (e.key === 'Escape' && selected.size) { clearSel(); return; }
-        if (e.key === '/' && !typing && appOn()) { e.preventDefault(); showTab('library'); $('q').focus(); }
-    });
-
-    /* ================= เริ่ม ================= */
+    /* ---------- boot ---------- */
     if (key) {
         showApp('');
         api('ping').then(r => { if (r.status === 'success') showApp(r.folderUrl); }).catch(() => {});
